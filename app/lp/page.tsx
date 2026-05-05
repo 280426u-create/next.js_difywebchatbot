@@ -1,185 +1,133 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import ChatBot from "../../components/ChatBot";
 import Link from "next/link";
 
-export default function Page() {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
-
+export default function LP() {
   return (
-    <main
-      style={{
-        fontFamily: "sans-serif",
-        minHeight: "100vh",
-        padding: "80px 20px",
-        maxWidth: "1000px",
-        margin: "0 auto",
-        background: "linear-gradient(180deg,#f8fafc,#eef2ff)",
-      }}
-    >
-      {/* HERO */}
-      <section
-        style={{
-          textAlign: "center",
-          marginBottom: "80px",
-          opacity: show ? 1 : 0,
-          transform: show ? "translateY(0)" : "translateY(20px)",
-          transition: "0.8s ease",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "48px",
-            fontWeight: "bold",
-            background: "linear-gradient(90deg,#2563eb,#7c3aed)",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          あなたのサービスを、もっとスマートに
-        </h1>
+    <main className="bg-gray-100 min-h-screen font-sans">
 
-        <p style={{ fontSize: "18px", color: "#555", marginTop: "16px" }}>
-          企業レベルの信頼感とデザインで、ユーザーの心をつかむ和建設へ
-        </p>
-
-        {/* メイン画像（修正版） */}
-        <div
-          style={{
-            marginTop: "40px",
-            borderRadius: "16px",
-            overflow: "hidden",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
-          }}
-        >
-          <Image
-            src="/lp/main.jpg"
-            alt="メイン画像"
-            width={1000}
-            height={600}
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-            }}
-          />
+      {/* ヘッダー */}
+      <header className="bg-white shadow p-4">
+        <div className="max-w-5xl mx-auto flex items-center">
+          <Image src="/lp/logo.png" alt="logo" width={120} height={40} />
         </div>
+      </header>
 
-        {/* CTAボタン（修正ポイント①） */}
-        <div style={{ marginTop: "40px" }}>
+      {/* ヒーロー画像 */}
+      <section className="max-w-5xl mx-auto mt-6">
+        <Image
+          src="/lp/main.jpg"
+          alt="hero"
+          width={1000}
+          height={500}
+          className="rounded-lg shadow"
+        />
+      </section>
+
+      {/* キャッチコピー */}
+      <section className="text-center mt-10 px-4">
+        <h1 className="text-3xl font-bold mb-4">和建設</h1>
+        <p className="text-gray-600 max-w-xl mx-auto">
+          分譲マンション・戸建住宅・公共事業などを展開。
+          地域の文化と歴史を大切にしながら、未来へ続く住まいを提供します。
+        </p>
+      </section>
+
+      {/* アプリ紹介 */}
+      <section className="max-w-5xl mx-auto mt-12 px-4">
+        <h2 className="text-xl font-bold mb-6">アプリ紹介</h2>
+
+        <div className="grid gap-6">
+
+          {/* カード1 */}
+          <div className="bg-white p-6 rounded-lg shadow text-center">
+            <div className="text-4xl mb-2">🤖</div>
+            <h3 className="font-bold mb-2">AIチャットボット</h3>
+            <p className="text-gray-600 text-sm">
+              住宅に関する疑問を24時間いつでも解決します。
+            </p>
+          </div>
+
+          {/* カード2 */}
+          <div className="bg-white p-6 rounded-lg shadow text-center">
+            <div className="text-4xl mb-2">💡</div>
+            <h3 className="font-bold mb-2">理想のお部屋</h3>
+            <p className="text-gray-600 text-sm">
+              仮想空間で理想の暮らしをシミュレーション。
+            </p>
+          </div>
+
+          {/* カード3 */}
+          <div className="bg-white p-6 rounded-lg shadow text-center">
+            <div className="text-4xl mb-2">🪙</div>
+            <h3 className="font-bold mb-2">ポイント</h3>
+            <p className="text-gray-600 text-sm">
+              利用に応じてポイントが貯まり特典に交換できます。
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-5xl mx-auto mt-12 px-4">
+        <div className="border-4 border-green-700 p-8 text-center rounded-lg">
+          <h2 className="text-xl font-bold mb-4">来場者限定特典</h2>
+
           <Link
             href="/query"
-            style={{
-              display: "inline-block",
-              padding: "18px 40px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              color: "#fff",
-              borderRadius: "999px",
-              background: "linear-gradient(90deg,#2563eb,#7c3aed)",
-              boxShadow: "0 10px 30px rgba(124,58,237,0.4)",
-              transition: "0.3s",
-              transform: "scale(1)",
-              textDecoration: "none",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.boxShadow =
-                "0 15px 40px rgba(124,58,237,0.6)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.boxShadow =
-                "0 10px 30px rgba(124,58,237,0.4)";
-            }}
+            className="inline-block bg-green-700 text-white px-6 py-3 rounded-full font-bold hover:bg-green-800"
           >
-            インストールはこちらから
+            アプリインストールはこちら
           </Link>
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section style={{ marginBottom: "60px" }}>
-        <h2 style={{ fontSize: "28px", marginBottom: "20px" }}>特徴</h2>
+      {/* 物件 */}
+      <section className="max-w-5xl mx-auto mt-12 px-4">
+        <h2 className="text-xl font-bold mb-6">分譲中の物件一覧</h2>
 
-        <div style={{ display: "grid", gap: "16px" }}>
-          {[
-            "チャット機能で疑問や不安を即解消",
-            "貯まったポイントで作るお部屋のイメージ作成",
-            "ガチャ機能やポイント数に応じた景品",
-          ].map((text, i) => (
-            <div
-              key={i}
-              style={{
-                padding: "20px",
-                borderRadius: "12px",
-                background: "#fff",
-                boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
-                transition: "0.3s",
-              }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.transform = "translateY(-5px)")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.transform = "translateY(0)")
-              }
-            >
-              {text}
-            </div>
-          ))}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <Image
+            src="/lp/building.jpg"
+            alt="building"
+            width={1000}
+            height={400}
+            className="rounded"
+          />
+          <p className="text-center mt-4 font-semibold">
+            ビ・ウェル児島赤崎
+          </p>
+        </div>
+
+        <div className="text-center mt-6">
+          <button className="bg-green-700 text-white px-6 py-3 rounded">
+            資料請求はこちらから
+          </button>
         </div>
       </section>
 
-      {/* お客様の声 */}
-      <section
-        style={{
-          padding: "40px",
-          borderRadius: "16px",
-          background: "linear-gradient(90deg,#eef2ff,#f5f3ff)",
-          marginBottom: "60px",
-        }}
-      >
-        <h2 style={{ fontSize: "28px", marginBottom: "16px" }}>
-          都建て住宅情報
-        </h2>
-        <p style={{ fontSize: "18px", color: "#444" }}>
-          “お知らせ”
-        </p>
+      {/* お問い合わせ */}
+      <section className="max-w-5xl mx-auto mt-12 px-4 space-y-6">
+
+        <div className="border-2 border-green-700 p-6 rounded">
+          <p className="mb-2">営業時間 10:00 - 18:00</p>
+          <p className="text-blue-600 text-lg">0120-383-070</p>
+        </div>
+
+        <div className="border-2 border-green-700 p-6 rounded">
+          <p className="mb-2">営業時間 10:00 - 18:00</p>
+          <p className="text-blue-600 text-lg">0120-686-808</p>
+        </div>
+
       </section>
 
-      {/* CTA（修正ポイント②） */}
-      <section style={{ textAlign: "center" }}>
-        <Link
-          href="/query"
-          style={{
-            display: "inline-block",
-            padding: "16px 32px",
-            background: "#111827",
-            color: "#fff",
-            borderRadius: "8px",
-            fontSize: "18px",
-            textDecoration: "none",
-            transition: "0.3s",
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.opacity = "0.8";
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.opacity = "1";
-          }}
-        >
-          インストールはこちらから
-        </Link>
-      </section>
+      {/* フッター */}
+      <footer className="mt-12 bg-white p-6 text-center text-sm text-gray-500">
+        © 和建設
+      </footer>
 
-      {/* LP下部の簡易チャット */}
-      <ChatBot />
     </main>
   );
 }
