@@ -46,7 +46,7 @@ export default function Page() {
         </h1>
 
         <p style={{ fontSize: "18px", color: "#555", marginTop: "16px" }}>
-          企業レベルの信頼感とデザインで、ユーザーの心をつかむLPへ
+          企業レベルの信頼感とデザインで、ユーザーの心をつかむ和建設へ
         </p>
 
         {/* メイン画像（修正版） */}
