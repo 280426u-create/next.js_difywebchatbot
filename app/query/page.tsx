@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 
+import ReactMarkdown from "react-markdown";
+
 export default function QueryPage() {
   const [msg, setMsg] = useState("");
   const [chat, setChat] = useState<
@@ -84,39 +86,23 @@ export default function QueryPage() {
               }}
             >
               {/* 🔥 画像表示 */}
-              {(() => {
-  // ① Markdown画像を取得
-  const matches = [...c.text.matchAll(/!\[.*?\]\((.*?)\)/g)];
-  const imageUrls = matches.map((m) => m[1]);
-
-  const cleanText = c.text
-    .replace(/!\[.*?\]\(.*?\)/g, "")
-    .trim();
-
-  return (
-    <>
-      <div style={{ whiteSpace: "pre-wrap" }}>
-        {cleanText}
-      </div>
-
-      {imageUrls.map((url, i) => (
-        <img
-          key={i}
-          src={url}
-          alt={`画像-${i}`}
-          style={{
-            maxWidth: "100%",
-            borderRadius: "12px",
-            marginTop: "10px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-            cursor: "pointer",
-          }}
-          onClick={() => window.open(url)}
-        />
-      ))}
-    </>
-  );
-})()}
+              <ReactMarkdown
+  components={{
+    img: ({ ...props }) => (
+      <img
+        {...props}
+        style={{
+          maxWidth: "100%",
+          borderRadius: "12px",
+          marginTop: "10px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+        }}
+      />
+    ),
+  }}
+>
+  {c.text}
+</ReactMarkdown>
             </div>
           </div>
         ))}
