@@ -86,46 +86,34 @@ export default function QueryPage() {
               {/* 🔥 画像表示 */}
               {(() => {
   // ① Markdown画像を取得
-  const mdMatch = c.text.match(/!\[.*?\]\((.*?)\)/);
+  const matches = [...c.text.matchAll(/!\[.*?\]\((.*?)\)/g)];
+  const imageUrls = matches.map((m) => m[1]);
 
-  // ② 通常URLも取得
-  const urlMatch = c.text.match(/https?:\/\/[^\s]+/);
-
-  // ③ 優先順位つける
-  const imageUrl = mdMatch
-    ? mdMatch[1]
-    : urlMatch
-    ? urlMatch[0]
-    : null;
-
-  // ④ Markdown部分を削除
   const cleanText = c.text
-    .replace(/!\[.*?\]\(.*?\)/, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
     .trim();
 
   return (
     <>
-      {/* テキスト */}
       <div style={{ whiteSpace: "pre-wrap" }}>
         {cleanText}
       </div>
 
-      {/* 画像 */}
-      {imageUrl && (
+      {imageUrls.map((url, i) => (
         <img
-          src={imageUrl}
-          alt="画像"
+          key={i}
+          src={url}
+          alt={`画像-${i}`}
           style={{
             maxWidth: "100%",
             borderRadius: "12px",
             marginTop: "10px",
-            boxShadow:
-              "0 10px 30px rgba(0,0,0,0.15)",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
             cursor: "pointer",
           }}
-          onClick={() => window.open(imageUrl)}
+          onClick={() => window.open(url)}
         />
-      )}
+      ))}
     </>
   );
 })()}
