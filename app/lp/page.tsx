@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import ChatBot from "../../components/ChatBot";
+import Link from "next/link";
 
-export default function LP() {
+export default function Page() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -12,168 +13,173 @@ export default function LP() {
   }, []);
 
   return (
-    <main className="bg-[#f8fafc] text-gray-800 font-sans">
-
-      {/* ヘッダー */}
-      <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur z-50 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center">
-          <Image src="/lp/logo.png" alt="logo" width={120} height={40} />
-        </div>
-      </header>
-
-      <div className="pt-24" />
-
-      {/* ヒーロー */}
-      <section className="max-w-6xl mx-auto px-6 text-center">
+    <main
+      style={{
+        fontFamily: "sans-serif",
+        minHeight: "100vh",
+        padding: "80px 20px",
+        maxWidth: "1000px",
+        margin: "0 auto",
+        background: "linear-gradient(180deg,#f8fafc,#eef2ff)",
+      }}
+    >
+      {/* HERO */}
+      <section
+        style={{
+          textAlign: "center",
+          marginBottom: "80px",
+          opacity: show ? 1 : 0,
+          transform: show ? "translateY(0)" : "translateY(20px)",
+          transition: "0.8s ease",
+        }}
+      >
         <h1
-          className={`text-4xl md:text-5xl font-bold mb-6 transition-all duration-700 ${
-            show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
+          style={{
+            fontSize: "48px",
+            fontWeight: "bold",
+            background: "linear-gradient(90deg,#2563eb,#7c3aed)",
+            WebkitBackgroundClip: "text",
+            color: "transparent",
+          }}
         >
-          あなたの暮らしを、もっとスマートに
+          あなたのサービスを、もっとスマートに
         </h1>
 
-        <p
-          className={`text-gray-500 mb-10 transition-all duration-700 delay-200 ${
-            show ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          AIとデザインで、新しい住宅体験を提供します
+        <p style={{ fontSize: "18px", color: "#555", marginTop: "16px" }}>
+          企業レベルの信頼感とデザインで、ユーザーの心をつかむ和建設へ
         </p>
 
+        {/* メイン画像（修正版） */}
         <div
-          className={`transition-all duration-700 delay-300 ${
-            show ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
+          style={{
+            marginTop: "40px",
+            borderRadius: "16px",
+            overflow: "hidden",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+          }}
         >
           <Image
             src="/lp/main.jpg"
-            alt="hero"
-            width={1200}
+            alt="メイン画像"
+            width={1000}
             height={600}
-            className="rounded-2xl shadow-2xl"
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+            }}
           />
         </div>
 
-        {/* CTA */}
-        <div className="mt-10">
+        {/* CTAボタン（修正ポイント①） */}
+        <div style={{ marginTop: "40px" }}>
           <Link
             href="/query"
-            className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-bold shadow-lg hover:scale-105 transition"
+            style={{
+              display: "inline-block",
+              padding: "18px 40px",
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: "#fff",
+              borderRadius: "999px",
+              background: "linear-gradient(90deg,#2563eb,#7c3aed)",
+              boxShadow: "0 10px 30px rgba(124,58,237,0.4)",
+              transition: "0.3s",
+              transform: "scale(1)",
+              textDecoration: "none",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow =
+                "0 15px 40px rgba(124,58,237,0.6)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow =
+                "0 10px 30px rgba(124,58,237,0.4)";
+            }}
           >
-            インストールはこちら
+            インストールはこちらから
           </Link>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="max-w-6xl mx-auto px-6 mt-24">
-        <h2 className="text-2xl font-bold mb-10 text-center">
-          アプリの特徴
-        </h2>
+      <section style={{ marginBottom: "60px" }}>
+        <h2 style={{ fontSize: "28px", marginBottom: "20px" }}>特徴</h2>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div style={{ display: "grid", gap: "16px" }}>
           {[
-            {
-              icon: "🤖",
-              title: "AIチャット",
-              text: "24時間いつでも住宅相談が可能",
-            },
-            {
-              icon: "🏠",
-              title: "理想の空間",
-              text: "仮想空間で住まいを体験",
-            },
-            {
-              icon: "🎁",
-              title: "ポイント",
-              text: "利用で特典がもらえる",
-            },
-          ].map((item, i) => (
+            "チャット機能で疑問や不安を即解消",
+            "貯まったポイントで作るお部屋のイメージ作成",
+            "ガチャ機能やポイント数に応じた景品",
+          ].map((text, i) => (
             <div
               key={i}
-              className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition duration-300 text-center"
+              style={{
+                padding: "20px",
+                borderRadius: "12px",
+                background: "#fff",
+                boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
+                transition: "0.3s",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.transform = "translateY(-5px)")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.transform = "translateY(0)")
+              }
             >
-              <div className="text-4xl mb-4">{item.icon}</div>
-              <h3 className="font-bold mb-2">{item.title}</h3>
-              <p className="text-gray-500 text-sm">{item.text}</p>
+              {text}
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA強調 */}
-      <section className="max-w-4xl mx-auto mt-24 px-6">
-        <div className="bg-gradient-to-r from-green-600 to-emerald-500 text-white p-10 rounded-2xl text-center shadow-xl">
-          <h2 className="text-2xl font-bold mb-4">
-            来場者限定特典
-          </h2>
-
-          <Link
-            href="/query"
-            className="inline-block bg-white text-green-600 px-6 py-3 rounded-full font-bold hover:scale-105 transition"
-          >
-            アプリインストールはこちら
-          </Link>
-        </div>
-      </section>
-
-      {/* 物件 */}
-      <section className="max-w-6xl mx-auto px-6 mt-24">
-        <h2 className="text-2xl font-bold mb-8 text-center">
-          分譲中の物件
-        </h2>
-
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition">
-          <Image
-            src="/lp/building.jpg"
-            alt="building"
-            width={1200}
-            height={500}
-          />
-          <div className="p-6 text-center">
-            <p className="font-semibold text-lg">
-              ビ・ウェル児島赤崎
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* お問い合わせ */}
-      <section className="max-w-5xl mx-auto px-6 mt-24 space-y-6">
-        {["0120-383-070", "0120-686-808"].map((tel, i) => (
-          <div
-            key={i}
-            className="bg-white p-6 rounded-xl shadow flex justify-between items-center hover:shadow-lg transition"
-          >
-            <div>
-              <p className="text-sm text-gray-500">
-                営業時間 10:00 - 18:00
-              </p>
-              <p className="text-xl text-blue-600 font-bold">
-                {tel}
-              </p>
-            </div>
-            <button className="bg-green-600 text-white px-4 py-2 rounded">
-              お問い合わせ
-            </button>
-          </div>
-        ))}
-      </section>
-
-      {/* フッター */}
-      <footer className="mt-24 py-10 text-center text-gray-400 text-sm">
-        © 和建設
-      </footer>
-
-      {/* 浮遊チャットボタン */}
-      <Link
-        href="/query"
-        className="fixed bottom-6 right-6 bg-black text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transition"
+      {/* お客様の声 */}
+      <section
+        style={{
+          padding: "40px",
+          borderRadius: "16px",
+          background: "linear-gradient(90deg,#eef2ff,#f5f3ff)",
+          marginBottom: "60px",
+        }}
       >
-        チャットする
-      </Link>
+        <h2 style={{ fontSize: "28px", marginBottom: "16px" }}>
+          都建て住宅情報
+        </h2>
+        <p style={{ fontSize: "18px", color: "#444" }}>
+          “お知らせ”
+        </p>
+      </section>
 
+      {/* CTA（修正ポイント②） */}
+      <section style={{ textAlign: "center" }}>
+        <Link
+          href="/query"
+          style={{
+            display: "inline-block",
+            padding: "16px 32px",
+            background: "#111827",
+            color: "#fff",
+            borderRadius: "8px",
+            fontSize: "18px",
+            textDecoration: "none",
+            transition: "0.3s",
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.opacity = "0.8";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.opacity = "1";
+          }}
+        >
+          インストールはこちらから
+        </Link>
+      </section>
+
+      {/* LP下部の簡易チャット */}
+      <ChatBot />
     </main>
   );
 }
