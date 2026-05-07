@@ -124,7 +124,7 @@ export default function Page() {
                   textDecoration: "none",
                 }}
               >
-                インストールはこちらから
+                ダウンロードはこちらから
               </Link>
             </div>
           </section>
@@ -213,7 +213,7 @@ export default function Page() {
                 textDecoration: "none",
               }}
             >
-              インストールはこちら
+              ダウンロードはこちら
             </Link>
           </div>
         </section>
