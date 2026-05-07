@@ -8,14 +8,6 @@ type Chat = {
   text: string;
 };
 
-type LoanData = {
-  plan?: string;
-  price?: number;
-  downPayment?: number;
-  years?: number;
-  rate?: number;
-};
-
 export default function QueryPage() {
   const [msg, setMsg] = useState("");
 
@@ -23,46 +15,46 @@ export default function QueryPage() {
     {
       role: "bot",
       text:
-        "こんにちは！🏠\n住宅ローンシミュレーションを開始します。\n\nまず、201・202・203・204からお選びください。",
+        "こんにちは！🏠\n住宅の相談やローンのことなら何でも聞いてください！\n\nローンシミュレーションをしたい場合は『ローン』と入力してください 😊",
     },
   ]);
 
   const [visible, setVisible] = useState(false);
 
-  // 現在の質問ステップ
-  const [step, setStep] = useState(0);
+  // =========================
+  // ローン用 state
+  // =========================
 
-  // ローン情報
-  const [loanData, setLoanData] = useState<LoanData>({});
+  const [loanMode, setLoanMode] = useState(false);
+
+  const [loanStep, setLoanStep] = useState("");
+
+  const [loanData, setLoanData] = useState({
+    plan: "",
+    family: "",
+    age: "",
+    income: "",
+    price: 0,
+    downPayment: 0,
+    years: 35,
+    rate: 0.8,
+    monthlyHope: "",
+  });
 
   useEffect(() => {
     setVisible(true);
   }, []);
 
-  // 毎月返済額計算
-  function calculateLoan(
-    principal: number,
-    annualRate: number,
-    years: number
-  ) {
-    const monthlyRate = annualRate / 100 / 12;
-
-    const months = years * 12;
-
-    const payment =
-      (principal *
-        monthlyRate *
-        Math.pow(1 + monthlyRate, months)) /
-      (Math.pow(1 + monthlyRate, months) - 1);
-
-    return Math.round(payment);
-  }
+  // =========================
+  // メッセージ送信
+  // =========================
 
   async function send() {
     if (!msg) return;
 
     const userMsg = msg;
 
+    // ユーザー表示
     setChat((prev) => [
       ...prev,
       { role: "user", text: userMsg },
@@ -70,28 +62,160 @@ export default function QueryPage() {
 
     setMsg("");
 
-    // STEP 0: プラン
-    if (step === 0) {
-      setLoanData((prev) => ({
-        ...prev,
-        plan: userMsg,
-      }));
+    // =========================
+    // ローン開始
+    // =========================
+
+    if (
+      userMsg.includes("ローン") ||
+      userMsg.includes("シミュ") ||
+      userMsg.includes("住宅ローン")
+    ) {
+      setLoanMode(true);
+
+      setLoanStep("plan");
 
       setChat((prev) => [
         ...prev,
         {
           role: "bot",
-          text:
-            "購入予定価格を教えてください。\n例：3500万円",
+          text: `
+# 🏠 住宅ローン診断を開始します！
+
+まずはプランを選択してください。
+
+### 選択肢
+- 201
+- 202
+- 203
+- 204
+`,
         },
       ]);
 
-      setStep(1);
       return;
     }
 
-    // STEP 1: 物件価格
-    if (step === 1) {
+    // =========================
+    // STEP 1 プラン
+    // =========================
+
+    if (loanMode && loanStep === "plan") {
+      setLoanData((prev) => ({
+        ...prev,
+        plan: userMsg,
+      }));
+
+      setLoanStep("family");
+
+      setChat((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: `
+ありがとうございます 😊
+
+現在のご家族構成を教えてください。
+
+### 例
+- 夫婦2人
+- 4人家族
+- 単身
+`,
+        },
+      ]);
+
+      return;
+    }
+
+    // =========================
+    // STEP 2 家族構成
+    // =========================
+
+    if (loanMode && loanStep === "family") {
+      setLoanData((prev) => ({
+        ...prev,
+        family: userMsg,
+      }));
+
+      setLoanStep("age");
+
+      setChat((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: `
+現在の年齢を教えてください 🎂
+`,
+        },
+      ]);
+
+      return;
+    }
+
+    // =========================
+    // STEP 3 年齢
+    // =========================
+
+    if (loanMode && loanStep === "age") {
+      setLoanData((prev) => ({
+        ...prev,
+        age: userMsg,
+      }));
+
+      setLoanStep("income");
+
+      setChat((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: `
+世帯年収を教えてください 💰
+
+### 例
+- 450万円
+- 700万円
+`,
+        },
+      ]);
+
+      return;
+    }
+
+    // =========================
+    // STEP 4 年収
+    // =========================
+
+    if (loanMode && loanStep === "income") {
+      setLoanData((prev) => ({
+        ...prev,
+        income: userMsg,
+      }));
+
+      setLoanStep("price");
+
+      setChat((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: `
+購入予定の物件価格を教えてください 🏠
+
+### 例
+- 3500万円
+- 4200万円
+`,
+        },
+      ]);
+
+      return;
+    }
+
+    // =========================
+    // STEP 5 物件価格
+    // =========================
+
+    if (loanMode && loanStep === "price") {
       const price =
         Number(userMsg.replace(/[^0-9]/g, "")) *
         10000;
@@ -101,67 +225,127 @@ export default function QueryPage() {
         price,
       }));
 
+      setLoanStep("down");
+
       setChat((prev) => [
         ...prev,
         {
           role: "bot",
-          text:
-            "頭金はいくらですか？\n例：500万円\n※なしの場合は0",
+          text: `
+頭金の予定額を教えてください ✨
+
+※ なしの場合は「0」
+`,
         },
       ]);
 
-      setStep(2);
       return;
     }
 
-    // STEP 2: 頭金
-    if (step === 2) {
-      const downPayment =
+    // =========================
+    // STEP 6 頭金
+    // =========================
+
+    if (loanMode && loanStep === "down") {
+      const down =
         Number(userMsg.replace(/[^0-9]/g, "")) *
         10000;
 
       setLoanData((prev) => ({
         ...prev,
-        downPayment,
+        downPayment: down,
       }));
+
+      setLoanStep("monthly");
 
       setChat((prev) => [
         ...prev,
         {
           role: "bot",
-          text:
-            "返済期間を入力してください。\n例：35",
+          text: `
+毎月の希望返済額はありますか？ 😊
+
+### 例
+- 8万円
+- 10万円
+- 特になし
+`,
         },
       ]);
 
-      setStep(3);
       return;
     }
 
-    // STEP 3: 年数
-    if (step === 3) {
-      const years = Number(userMsg);
+    // =========================
+    // STEP 7 希望返済額
+    // =========================
+
+    if (loanMode && loanStep === "monthly") {
+      setLoanData((prev) => ({
+        ...prev,
+        monthlyHope: userMsg,
+      }));
+
+      setLoanStep("years");
+
+      setChat((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: `
+返済年数を選択してください 📅
+
+### 選択肢
+- 25年
+- 30年
+- 35年
+- 40年
+`,
+        },
+      ]);
+
+      return;
+    }
+
+    // =========================
+    // STEP 8 年数
+    // =========================
+
+    if (loanMode && loanStep === "years") {
+      const years = Number(
+        userMsg.replace(/[^0-9]/g, "")
+      );
 
       setLoanData((prev) => ({
         ...prev,
         years,
       }));
 
+      setLoanStep("rate");
+
       setChat((prev) => [
         ...prev,
         {
           role: "bot",
-          text:
-            "想定金利を入力してください。\n例：0.8",
+          text: `
+最後に、想定金利を入力してください 📈
+
+### 例
+- 0.7
+- 0.8
+- 1.2
+`,
         },
       ]);
 
-      setStep(4);
       return;
     }
 
-    // STEP 4: 金利
-    if (step === 4) {
+    // =========================
+    // STEP 9 金利 → 結果
+    // =========================
+
+    if (loanMode && loanStep === "rate") {
       const rate = Number(userMsg);
 
       const finalData = {
@@ -170,54 +354,77 @@ export default function QueryPage() {
       };
 
       const principal =
-        (finalData.price || 0) -
-        (finalData.downPayment || 0);
+        finalData.price -
+        finalData.downPayment;
 
-      const monthly = calculateLoan(
-        principal,
-        rate,
-        finalData.years || 35
-      );
+      const monthlyRate = rate / 100 / 12;
+
+      const months = finalData.years * 12;
+
+      const monthly =
+        (principal *
+          monthlyRate *
+          Math.pow(1 + monthlyRate, months)) /
+        (Math.pow(1 + monthlyRate, months) - 1);
 
       const total =
-        monthly * (finalData.years || 35) * 12;
+        monthly * finalData.years * 12;
 
       setChat((prev) => [
         ...prev,
         {
           role: "bot",
           text: `
-# 🏠 シミュレーション結果
+# 🏠 ローン診断結果
 
-## 選択プラン
-${finalData.plan}
+## お客様情報
+- プラン：${finalData.plan}
+- ご家族：${finalData.family}
+- 年齢：${finalData.age}歳
+- 世帯年収：${finalData.income}
+
+---
+
+# 💰 シミュレーション結果
 
 ## 借入額
 ${principal.toLocaleString()} 円
 
-## 金利
-${rate} %
+## 毎月返済額
+${Math.round(monthly).toLocaleString()} 円
 
-## 返済年数
-${finalData.years} 年
+## 総返済額
+${Math.round(total).toLocaleString()} 円
 
 ---
 
-# 💰 毎月返済額
-## ${monthly.toLocaleString()} 円
+ご希望であれば、
 
-# 💴 総返済額
-## ${total.toLocaleString()} 円
+- 「35年と40年比較」
+- 「金利違い比較」
+- 「無理のない予算診断」
+
+もできます 😊
 `,
         },
       ]);
 
-      setStep(5);
+      setLoanMode(false);
+
+      setLoanStep("");
 
       return;
     }
 
-    // 通常会話
+    // =========================
+    // 通常AIチャット
+    // =========================
+
+    setChat((prev) => [
+      ...prev,
+      { role: "bot", text: "考え中..." },
+    ]);
+
     const res = await fetch("/api/chat", {
       method: "POST",
       body: JSON.stringify({
@@ -228,13 +435,16 @@ ${finalData.years} 年
 
     const data = await res.json();
 
-    setChat((prev) => [
-      ...prev,
-      {
+    setChat((prev) => {
+      const newChat = [...prev];
+
+      newChat[newChat.length - 1] = {
         role: "bot",
         text: data.reply,
-      },
-    ]);
+      };
+
+      return newChat;
+    });
   }
 
   return (
@@ -278,7 +488,8 @@ ${finalData.years} 年
                     <img
                       {...props}
                       style={{
-                        maxWidth: "100%",
+                        maxWidth: "240px",
+                        width: "100%",
                         borderRadius: "12px",
                         marginTop: "10px",
                         boxShadow:
@@ -295,7 +506,7 @@ ${finalData.years} 年
         ))}
       </div>
 
-      {/* 入力 */}
+      {/* 入力欄 */}
       <div style={styles.inputArea}>
         <input
           value={msg}
@@ -307,10 +518,7 @@ ${finalData.years} 年
           style={styles.input}
         />
 
-        <button
-          onClick={send}
-          style={styles.button}
-        >
+        <button onClick={send} style={styles.button}>
           送信
         </button>
       </div>
@@ -353,12 +561,16 @@ const styles: any = {
   },
 
   bubble: {
-    padding: "12px 16px",
-    borderRadius: "16px",
-    maxWidth: "70%",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
-    lineHeight: 1.7,
-  },
+  padding: "10px 14px",
+  borderRadius: "16px",
+  maxWidth: "76%",
+  fontSize: "14px",
+  lineHeight: 1.5,
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-word",
+  overflowWrap: "break-word",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
+},
 
   inputArea: {
     display: "flex",
