@@ -9,7 +9,6 @@ const supabase = createClient(
 // =========================
 // 単語抽出
 // =========================
-
 function extractWords(text: string) {
   return text
     .replace(/[^\wぁ-んァ-ンー一-龠]/g, " ")
@@ -18,16 +17,44 @@ function extractWords(text: string) {
 }
 
 // =========================
+// ペルソナ判定
+// =========================
+function detectPersona(message: string) {
+  const msg = message;
+
+  // 50代夫婦 / 年収800-900 / 二人暮らし
+  if (
+    msg.includes("50") ||
+    msg.includes("夫婦") ||
+    msg.includes("二人") ||
+    msg.match(/800|900/)
+  ) {
+    return "P1";
+  }
+
+  // 30代女性一人暮らし / 年収450-550
+  if (
+    msg.includes("30") ||
+    msg.includes("女性") ||
+    msg.includes("一人暮らし") ||
+    msg.match(/450|500|550/)
+  ) {
+    return "P2";
+  }
+
+  // 40代ファミリー / 子供がいる / 年収1000
+  if (msg.includes("40") || msg.includes("子") || msg.match(/1000/)) {
+    return "P3";
+  }
+
+  return null;
+}
+
+// =========================
 // ローン計算
 // =========================
-
-function calcLoan(
-  amount: number,
-  rate: number,
-  years: number
-) {
+function calcLoan(amount: number, rate: number, years: number) {
   const r = rate / 100 / 12;
-
   const n = years * 12;
 
   const monthly =
@@ -40,76 +67,83 @@ function calcLoan(
 // =========================
 // Dify呼び出し
 // =========================
-
 async function callDify(message: string) {
   const res = await fetch(
     "https://api.dify.ai/v1/chat-messages",
     {
       method: "POST",
-
       headers: {
         Authorization: `Bearer ${process.env.DIFY_API_KEY}`,
-
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify({
         inputs: {},
-
         query: message,
-
         response_mode: "blocking",
-
         user: "test-user",
       }),
     }
   );
 
   const data = await res.json();
-
-  return (
-    data.answer ||
-    "すみません、うまく回答できませんでした。"
-  );
+  return data.answer || "すみません、うまく回答できませんでした。";
 }
 
 // =========================
 // POST
 // =========================
-
 export async function POST(req: Request) {
   const { chatId, message } = await req.json();
 
   let reply = "";
 
   // =========================
-  // ローン判定
+  // ① ペルソナ判定
   // =========================
+  const persona = detectPersona(message);
 
-  if (message.includes("ローン")) {
+  if (persona === "P1") {
     reply =
-      "ローン計算ですね！「3000 1.2 35」のように入力してください。\n\n（借入額 金利 年数）";
+      "50代ご夫婦向けのローンシミュレーションですね！\n頭金はどのくらいを予定されていますか？";
+  } else if (persona === "P2") {
+    reply =
+      "30代女性の方向けのローン相談ですね！\n頭金の予定額を教えていただけますか？";
+  } else if (persona === "P3") {
+    reply =
+      "40代ファミリー向けのローンシミュレーションですね！\n毎月の返済希望額はありますか？";
   }
 
   // =========================
-  // ローン数値入力
+  // ペルソナに該当 → ここで返す
   // =========================
+  if (reply !== "") {
+  const { data, error } = await supabase
+    .from("chat_logs")
+    .insert({
+      chat_id: chatId,
+      user_message: message,
+      bot_message: reply,
+      user_words: extractWords(message),
+      bot_words: extractWords(reply),
+    });
 
-  else if (/\d+/.test(message)) {
+  console.log("data:", data);
+  console.log("error:", error);
+
+  return NextResponse.json({ reply });
+}
+  // =========================
+  // ② 数値入力 → ローン計算
+  // =========================
+  if (/\d+/.test(message)) {
     const nums = message.match(/\d+(\.\d+)?/g);
 
     if (nums && nums.length >= 3) {
       const amount = Number(nums[0]) * 10000;
-
       const rate = Number(nums[1]);
-
       const years = Number(nums[2]);
 
-      const result = calcLoan(
-        amount,
-        rate,
-        years
-      );
+      const result = calcLoan(amount, rate, years);
 
       reply = `
 🏠 ローン計算結果
@@ -128,45 +162,30 @@ ${years} 年
 `;
     } else {
       reply =
-        "数値の形式が正しくありません。\n\n例：3000 1.2 35";
+        "数値の形式が正しくありません。\n例：3000 1.2 35";
     }
   }
 
   // =========================
-  // Dify
+  // ③ ローンでも数値でもない → Dify
   // =========================
-
-  else {
+  if (reply === "") {
     reply = await callDify(message);
   }
 
   // =========================
-  // 単語抽出
+  // ④ Supabase保存
   // =========================
-
-  const userWords = extractWords(message);
-
-  const botWords = extractWords(reply);
-
-  // =========================
-  // Supabase保存
-  // =========================
-
   await supabase.from("chat_logs").insert({
     chat_id: chatId,
-
     user_message: message,
-
     bot_message: reply,
-
-    user_words: userWords,
-
-    bot_words: botWords,
+    user_words: extractWords(message),
+    bot_words: extractWords(reply),
   });
 
   // =========================
   // 返却
   // =========================
-
   return NextResponse.json({ reply });
 }
