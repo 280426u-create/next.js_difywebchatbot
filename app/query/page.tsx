@@ -470,18 +470,29 @@ ${Math.round(total).toLocaleString()} 円
             }}
           >
             <div
-              style={{
-                ...styles.bubble,
-                background:
-                  c.role === "user"
-                    ? "linear-gradient(90deg,#2563eb,#7c3aed)"
-                    : "#fff",
-                color:
-                  c.role === "user"
-                    ? "#fff"
-                    : "#111",
-              }}
-            >
+  style={{
+    ...styles.bubble,
+
+    maxWidth:
+      c.role === "user"
+        ? "70%"
+        : "820px",
+
+    background:
+      c.role === "user"
+        ? "linear-gradient(135deg,#2563eb,#7c3aed)"
+        : "rgba(255,255,255,0.72)",
+
+    color:
+      c.role === "user"
+        ? "#fff"
+        : "#111",
+
+    backdropFilter: "blur(12px)",
+    WebkitBackdropFilter: "blur(12px)",
+  }}
+>
+                
               <ReactMarkdown
                 components={{
                   img: ({ ...props }) => (
@@ -531,8 +542,14 @@ const styles: any = {
     height: "100vh",
     display: "flex",
     flexDirection: "column",
-    background:
-      "linear-gradient(180deg,#f8fafc,#eef2ff)",
+    background: `
+linear-gradient(
+  180deg,
+  #f8fafc 0%,
+  #eef2ff 45%,
+  #e0e7ff 100%
+)
+`,
     fontFamily: "sans-serif",
     opacity: visible ? 1 : 0,
     transform: visible
@@ -550,10 +567,20 @@ const styles: any = {
   },
 
   chatArea: {
-    flex: 1,
-    padding: "20px",
-    overflowY: "auto",
-  },
+  flex: 1,
+
+  padding: "32px 20px 120px",
+
+  overflowY: "auto",
+
+  display: "flex",
+
+  flexDirection: "column",
+
+  gap: "14px",
+
+  scrollBehavior: "smooth",
+},
 
   messageRow: {
     display: "flex",
@@ -561,23 +588,52 @@ const styles: any = {
   },
 
   bubble: {
-  padding: "10px 14px",
-  borderRadius: "16px",
-  maxWidth: "76%",
-  fontSize: "14px",
-  lineHeight: 1.5,
+  padding: "16px 18px",
+  borderRadius: "24px",
+  maxWidth: "820px",
+  width: "fit-content",
+
+  fontSize: "15px",
+  lineHeight: 1.8,
+  letterSpacing: "0.01em",
+
   whiteSpace: "pre-wrap",
   wordBreak: "break-word",
   overflowWrap: "break-word",
-  boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
+
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+
+  boxShadow:
+    "0 10px 30px rgba(15,23,42,0.08)",
+
+  border: "1px solid rgba(255,255,255,0.18)",
+
+  transition:
+    "all 0.25s cubic-bezier(.4,0,.2,1)",
+
+  animation: "fadeUp 0.25s ease",
 },
 
   inputArea: {
-    display: "flex",
-    padding: "16px",
-    borderTop: "1px solid #e5e7eb",
-    background: "#fff",
-  },
+  display: "flex",
+
+  padding: "18px",
+
+  gap: "12px",
+
+  background:
+    "rgba(255,255,255,0.72)",
+
+  backdropFilter: "blur(20px)",
+
+  borderTop:
+    "1px solid rgba(255,255,255,0.2)",
+
+  position: "sticky",
+
+  bottom: 0,
+},
 
   input: {
     flex: 1,
