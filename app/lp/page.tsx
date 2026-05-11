@@ -198,7 +198,7 @@ export default function Page() {
               background: "#f9fafb",
             }}
           >
-            <p style={{ fontSize: "26px", fontWeight: "bold", marginBottom: "30px" }}>
+            <p style={{ fontSize: "26px", fontWeight: "bold", marginBottom: "50px" }}>
               来場者限定特典
             </p>
 
@@ -219,7 +219,150 @@ export default function Page() {
         </section>
       </div>
 
-          
+        {/* 🔥 お問い合わせフォーム（追加分） */}
+<section style={{ textAlign: "center", marginBottom: "120px" }}>
+  <div
+    style={{
+      maxWidth: "900px",
+      margin: "0 auto",
+      border: "2px solid #16a34a", // 緑の枠線
+      borderRadius: "8px",
+      padding: "40px",
+      background: "#fff",
+      display: "flex",
+      flexWrap: "wrap", // スマホで縦並びにするため
+      justifyContent: "space-around",
+      alignItems: "center",
+      gap: "20px"
+    }}
+  >
+    {/* 左側：お問い合わせボタン（高知） */}
+    <div style={{ textAlign: "center" }}>
+      <p style={{ fontSize: "14px", color: "#666", marginBottom: "10px" }}>営業時間 10:00 - 18:00</p>
+      <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+        <Link
+          href="/contact-kochi"
+          style={{
+            padding: "15px 30px",
+            background: "#16a34a",
+            color: "#fff",
+            borderRadius: "4px",
+            textDecoration: "none",
+            fontWeight: "bold",
+            fontSize: "18px"
+          }}
+        >
+          お問い合わせはこちら（高知）
+        </Link>
+        <div style={{ textAlign: "left" }}>
+          <p style={{ fontSize: "20px", fontWeight: "bold", color: "#2563eb", margin: 0 }}>
+            📞 0120-383-070
+          </p>
+          <p style={{ fontSize: "12px", color: "#666", margin: 0 }}>
+            定休日 / 水曜日（祝日は営業・木曜が振替休日）
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* 岡山用も必要ならここに同じ構造で並べるか、下に複製してください */}
+</section> 
+{/* 🔥 お問い合わせフォーム（追加分） */}
+<section style={{ textAlign: "center", marginBottom: "120px" }}>
+  <div
+    style={{
+      maxWidth: "900px",
+      margin: "0 auto",
+      border: "2px solid #16a34a", // 緑の枠線
+      borderRadius: "8px",
+      padding: "40px",
+      background: "#fff",
+      display: "flex",
+      flexWrap: "wrap", // スマホで縦並びにするため
+      justifyContent: "space-around",
+      alignItems: "center",
+      gap: "20px"
+    }}
+  >
+    {/* 左側：お問い合わせボタン（高知） */}
+    <div style={{ textAlign: "center" }}>
+      <p style={{ fontSize: "14px", color: "#666", marginBottom: "10px" }}>営業時間 10:00 - 18:00</p>
+      <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+        <Link
+          href="/contact-kochi"
+          style={{
+            padding: "15px 30px",
+            background: "#16a34a",
+            color: "#fff",
+            borderRadius: "4px",
+            textDecoration: "none",
+            fontWeight: "bold",
+            fontSize: "18px"
+          }}
+        >
+          お問い合わせはこちら（高知）
+        </Link>
+        <div style={{ textAlign: "left" }}>
+          <p style={{ fontSize: "20px", fontWeight: "bold", color: "#2563eb", margin: 0 }}>
+            📞 0120-383-070
+          </p>
+          <p style={{ fontSize: "12px", color: "#666", margin: 0 }}>
+            定休日 / 水曜日（祝日は営業・木曜が振替休日）
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{/* 🔥 フッター（ロゴ・本社情報） */}
+          <footer
+            style={{
+              background: "#fff",
+              padding: "60px 20px",
+              borderTop: "1px solid #eee",
+              color: "#333",
+            }}
+          >
+            <div
+              style={{
+                maxWidth: "1100px",
+                margin: "0 auto",
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                gap: "40px",
+              }}
+            >
+              <div style={{ flex: "1 1 200px" }}>
+                <img
+                  src="/lp/logo.png"
+                  alt="和建設"
+                  style={{ width: "180px", marginBottom: "20px" }}
+                />
+              </div>
+
+              <div style={{ flex: "1 1 300px", fontSize: "14px", lineHeight: "1.8" }}>
+                <p style={{ fontWeight: "bold", marginBottom: "10px" }}>本社</p>
+                <p>〒780-0056</p>
+                <p>高知市北本町4丁目3-25</p>
+                <p>営業時間 / 9:00〜18:00</p>
+                <p>定休日 / 土・日・祝日</p>
+                <p style={{ fontWeight: "bold", fontSize: "16px", marginTop: "10px" }}>
+                  ☎ 088-885-5888
+                </p>
+              </div>
+
+              <div style={{ flex: "1 1 150px" }}>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, lineHeight: "2.5", fontSize: "15px" }}>
+                  <li><Link href="/" style={{ color: "#333", textDecoration: "none" }}>トップ</Link></li>
+                  <li><Link href="#app" style={{ color: "#333", textDecoration: "none" }}>アプリ</Link></li>
+                  <li><Link href="#properties" style={{ color: "#333", textDecoration: "none" }}>物件一覧</Link></li>
+                  <li><Link href="/query" style={{ color: "#333", textDecoration: "none" }}>お問い合わせ</Link></li>
+                </ul>
+              </div>
+            </div>
+          </footer>
         
 
         <ChatBot />
