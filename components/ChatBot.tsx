@@ -4,9 +4,16 @@ import { useState } from "react";
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
+
   const [input, setInput] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
   const [messages, setMessages] = useState([
-    { from: "bot", text: "こんにちは！何かお困りですか？" },
+    {
+      from: "bot",
+      text: "こんにちは！✨\nAIコンシェルジュ cofi です \nお気軽にご相談ください😊",
+    },
   ]);
 
   const sendMessage = async () => {
@@ -14,26 +21,31 @@ export default function ChatBot() {
 
     const userText = input;
 
-    // ユーザー表示
     setMessages((prev) => [
       ...prev,
       { from: "user", text: userText },
     ]);
+
     setInput("");
+
+    setLoading(true);
 
     try {
       const url = process.env.NEXT_PUBLIC_DIFY_API_URL;
 
       if (!url) {
-        throw new Error("DIFY_API_URLが設定されていません");
+        throw new Error("DIFY_API_URL未設定");
       }
 
       const res = await fetch(url, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
+
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_DIFY_API_KEY}`,
         },
+
         body: JSON.stringify({
           inputs: {},
           query: userText,
@@ -44,148 +56,345 @@ export default function ChatBot() {
 
       const data = await res.json();
 
-      const reply = data.answer || "エラーが発生しました";
+      const reply =
+        data.answer || "エラーが発生しました";
 
       setMessages((prev) => [
         ...prev,
-        { from: "bot", text: reply },
+        {
+          from: "bot",
+          text: reply,
+        },
       ]);
     } catch (error) {
       setMessages((prev) => [
         ...prev,
-        { from: "bot", text: "通信エラーが発生しました" },
+        {
+          from: "bot",
+          text: "通信エラーが発生しました😭",
+        },
       ]);
     }
+
+    setLoading(false);
   };
 
   return (
     <>
-      {/* 右下ボタン */}
+      {/* 開閉ボタン */}
       <div
         onClick={() => setOpen(!open)}
         style={{
           position: "fixed",
-          right: "20px",
-          bottom: "20px",
-          width: "60px",
-          height: "60px",
-          borderRadius: "50%",
-          background: "linear-gradient(90deg,#2563eb,#7c3aed)",
-          color: "#fff",
+
+          right: "24px",
+
+          bottom: "24px",
+
+          width: "66px",
+
+          height: "66px",
+
+          borderRadius: "999px",
+
+           background: `
+linear-gradient(
+135deg,
+#3A7D5D,#5CA27C
+)
+`,
+
           display: "flex",
+
           alignItems: "center",
-          justifyContent: "center",
-          fontSize: "24px",
+
+          justifyContent: "space-between",
+
+          color: "#fff",
+
+          fontSize: "30px",
+
           cursor: "pointer",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+
+          boxShadow:
+            "0 20px 40px rgba(58,125,93,0.18)",
+
           zIndex: 9999,
+
+          transition: "all .25s ease",
         }}
       >
-        💬
+        cofi
       </div>
 
-      {/* チャットウィンドウ */}
+      {/* ウィンドウ */}
       {open && (
         <div
           style={{
             position: "fixed",
-            right: "20px",
-            bottom: "90px",
-            width: "320px",
-            height: "420px",
-            background: "#fff",
-            borderRadius: "16px",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.25)",
-            display: "flex",
-            flexDirection: "column",
+
+            right: "24px",
+
+            bottom: "95px",
+
+            width: "360px",
+
+            height: "480px",
+
+            background:
+"rgba(246,252,248,0.88)",
+
+            backdropFilter: "blur(20px)",
+
+            WebkitBackdropFilter: "blur(20px)",
+
+            borderRadius: "28px",
+
             overflow: "hidden",
+
+            display: "flex",
+
+            flexDirection: "column",
+
+            boxShadow:
+              "0 25px 70px rgba(15,23,42,0.25)",
+
+            border:
+"1px solid rgba(92,162,124,0.15)",
+
             zIndex: 9999,
+
+            animation: "fadeUp .3s ease",
           }}
         >
           {/* ヘッダー */}
           <div
             style={{
-              background: "#2563eb",
+              padding: "18px 20px",
+
+              background:
+                "linear-gradient(135deg,#4338ca,#7c3aed)",
+
               color: "#fff",
-              padding: "12px",
-              fontWeight: "bold",
+
+              display: "flex",
+
+              alignItems: "center",
+
+              justifyContent: "space-between",
             }}
           >
-            サポートチャット
+            <div>
+              <div
+                style={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                }}
+              >
+                cofi 
+              </div>
+
+              <div
+                style={{
+                  fontSize: "12px",
+                  opacity: 0.85,
+                  marginTop: "4px",
+                }}
+              >
+                AI Concierge Assistant
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: "10px",
+                height: "10px",
+                borderRadius: "999px",
+                background: "#4ade80",
+                boxShadow:
+                  "0 0 10px rgba(74,222,128,0.8)",
+              }}
+            />
           </div>
 
-          {/* メッセージエリア */}
+          {/* メッセージ */}
           <div
             style={{
               flex: 1,
-              padding: "12px",
-              fontSize: "14px",
-              color: "#333",
+
               overflowY: "auto",
+
+              padding: "18px",
+
+              display: "flex",
+
+              flexDirection: "column",
+
+              gap: "12px",
+
+              background: `
+linear-gradient(
+180deg,
+#F7FBF8 0%,
+#EEF6F1 100%
+)
+`,
             }}
           >
             {messages.map((msg, i) => (
               <div
                 key={i}
                 style={{
-                  marginBottom: "10px",
-                  textAlign:
-                    msg.from === "user" ? "right" : "left",
+                  display: "flex",
+
+                  justifyContent:
+                    msg.from === "user"
+                      ? "flex-end"
+                      : "flex-start",
                 }}
               >
-                <span
+                <div
                   style={{
+                    maxWidth: "82%",
+
+                    padding: "12px 16px",
+
+                    borderRadius:
+                      msg.from === "user"
+                        ? "18px 18px 6px 18px"
+                        : "18px 18px 18px 6px",
+
                     background:
                       msg.from === "user"
-                        ? "#2563eb"
-                        : "#e5e7eb",
+                        ? "linear-gradient(135deg,#4F9A73,#6DB28C)"
+                        : "rgba(255,255,255,0.9)",
+
                     color:
-                      msg.from === "user" ? "#fff" : "#000",
-                    padding: "8px 12px",
-                    borderRadius: "12px",
-                    display: "inline-block",
-                    maxWidth: "80%",
+                      msg.from === "user"
+                        ? "#fff"
+                        : "#111827",
+
+                    fontSize: "14px",
+
+                    lineHeight: 1.7,
+
+                    whiteSpace: "pre-wrap",
+
+                    boxShadow:
+                      msg.from === "user"
+                        ? "0 10px 25px rgba(99,102,241,0.25)"
+                        : "0 10px 25px rgba(15,23,42,0.06)",
+
+                    border:
+                      msg.from === "bot"
+                        ? "1px solid rgba(255,255,255,0.7)"
+                        : "none",
                   }}
                 >
                   {msg.text}
-                </span>
+                </div>
               </div>
             ))}
+
+            {loading && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "12px 16px",
+
+                    borderRadius:
+                      "18px 18px 18px 6px",
+
+                    background:
+                      "rgba(255,255,255,0.9)",
+
+                    fontSize: "14px",
+
+                    color: "#555",
+
+                    boxShadow:
+                      "0 10px 25px rgba(15,23,42,0.06)",
+                  }}
+                >
+                  cofi が考えています...
+                </div>
+              </div>
+            )}
           </div>
 
           {/* 入力欄 */}
           <div
             style={{
-              padding: "10px",
-              borderTop: "1px solid #eee",
+              padding: "16px",
+
+              background:
+                "rgba(255,255,255,0.75)",
+
+              backdropFilter: "blur(20px)",
+
+              borderTop:
+                "1px solid rgba(255,255,255,0.5)",
+
               display: "flex",
-              gap: "6px",
+
+              gap: "10px",
             }}
           >
             <input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) =>
+                setInput(e.target.value)
+              }
               onKeyDown={(e) =>
-                e.key === "Enter" && sendMessage()
+                e.key === "Enter" &&
+                sendMessage()
               }
               placeholder="メッセージを入力..."
               style={{
                 flex: 1,
-                padding: "10px",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
+
+                border: "none",
+
+                outline: "none",
+
+                padding: "14px 16px",
+
+                borderRadius: "14px",
+
+                background: "#fff",
+
+                fontSize: "14px",
+
+                boxShadow:
+                  "0 4px 15px rgba(15,23,42,0.06)",
               }}
             />
 
             <button
               onClick={sendMessage}
               style={{
-                background: "#2563eb",
-                color: "#fff",
-                padding: "10px 14px",
-                borderRadius: "8px",
+                width: "52px",
+
                 border: "none",
+
+                borderRadius: "14px",
+
+                background:
+                  "linear-gradient(135deg,#4f46e5,#7c3aed)",
+
+                color: "#fff",
+
                 cursor: "pointer",
+
+                fontSize: "18px",
+
+                boxShadow:
+                  "0 10px 25px rgba(99,102,241,0.35)",
               }}
             >
               ➤
