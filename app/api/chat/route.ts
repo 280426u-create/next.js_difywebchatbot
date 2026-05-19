@@ -73,7 +73,7 @@ async function callDify(message: string) {
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.DIFY_API_KEY}`,
+        Authorization: `Bearer ${process.env.DIFY_API_KEY_2}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
