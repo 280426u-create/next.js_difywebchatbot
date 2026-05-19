@@ -1,10 +1,9 @@
 import Image from 'next/image';
-import Search from '@/app/ui/search';
+import Search from '../search';
 import {
   CustomersTableType,
   FormattedCustomersTable,
-} from '@/app/lib/definitions';
-
+} from '../../lib/definitions';
 export default async function CustomersTable({
   customers,
 }: {
