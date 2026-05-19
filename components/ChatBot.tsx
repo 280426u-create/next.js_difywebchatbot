@@ -124,7 +124,7 @@ linear-gradient(
           transition: "all .25s ease",
         }}
       >
-        cofi
+        cofi!
       </div>
 
       {/* ウィンドウ */}
@@ -191,7 +191,7 @@ linear-gradient(
                   fontWeight: 700,
                 }}
               >
-                cofi 
+                cofi
               </div>
 
               <div
