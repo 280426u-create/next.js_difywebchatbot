@@ -1,34 +1,39 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { query } = await req.json();
+    const { message } = await req.json();
 
-    if (!query) {
-      return NextResponse.json(
-        { error: "query がありません" },
-        { status: 400 }
-      );
+    const difyRes = await fetch(
+      "https://api.dify.ai/v1/chat-messages",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_DIFY_API_KEY}`,
+        },
+        body: JSON.stringify({
+          inputs: {},
+          query: message,
+          response_mode: "streaming",
+          user: "user123",
+        }),
+      }
+    );
+
+    // ★★★ JSON ではなく raw text を確認するためのデバッグ ★★★
+    const text = await difyRes.text();
+    console.log("Dify raw response:", text);
+
+    return NextResponse.json({ raw: text });
+  } catch (e: unknown) {
+    // ★★★ unknown を Error として扱えるようにする ★★★
+    if (e instanceof Error) {
+      console.error("Error in /api/cofi:", e.message);
+      return NextResponse.json({ error: e.message }, { status: 500 });
+    } else {
+      console.error("Unknown error:", e);
+      return NextResponse.json({ error: "Unknown error" }, { status: 500 });
     }
-
-    const difyRes = await fetch(process.env.DIFY_API_URL!, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.DIFY_API_KEY}`,
-      },
-      body: JSON.stringify({
-        inputs: {},
-        query: query, // ← ここは文字列のままで OK
-        response_mode: "blocking",
-        user: "user-001",
-      }),
-    });
-
-    const data = await difyRes.json();
-    return NextResponse.json(data);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "server error" }, { status: 500 });
   }
 }
