@@ -13,15 +13,23 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+
     "plugins": [{ "name": "next" }],
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
+
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "global.d.ts",        // ← ← ← これが絶対必要！！
+    "global.d.ts",
     ".next/types/**/*.ts"
   ],
+
   "exclude": ["node_modules"]
 }
