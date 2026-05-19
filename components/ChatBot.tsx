@@ -37,20 +37,17 @@ export default function ChatBot() {
         throw new Error("DIFY_API_URL未設定");
       }
 
-      const res = await fetch(url, {
+      const res = await fetch("/api/cofi", {
         method: "POST",
 
         headers: {
           "Content-Type": "application/json",
-
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_DIFY_API_KEY}`,
         },
 
         body: JSON.stringify({
-          inputs: {},
+         
           query: userText,
-          response_mode: "blocking",
-          user: "user-001",
+          
         }),
       });
 
