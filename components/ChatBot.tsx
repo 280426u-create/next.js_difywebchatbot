@@ -31,11 +31,7 @@ export default function ChatBot() {
     setLoading(true);
 
     try {
-      const url = process.env.NEXT_PUBLIC_DIFY_API_URL;
-
-      if (!url) {
-        throw new Error("DIFY_API_URL未設定");
-      }
+      
 
       const res = await fetch("/api/cofi", {
         method: "POST",
