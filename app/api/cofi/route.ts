@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           inputs: {},
           query: message,
-          response_mode: "streaming",
           user: "user123",
         }),
       }
