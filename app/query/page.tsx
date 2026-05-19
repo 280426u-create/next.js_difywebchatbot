@@ -651,12 +651,7 @@ ${Math.round(monthly).toLocaleString()} 円
 ## 総返済額
 ${Math.round(total).toLocaleString()} 円
 
----
-ご希望であれば、
-- 「35年と40年比較」
-- 「金利違い比較」
-- 「無理のない予算診断」
-もできます 😊
+
 `,
         },
       ]);
