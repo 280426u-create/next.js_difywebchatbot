@@ -132,10 +132,30 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ reply });
 }
+
+// =========================
+// ② 眺望画像
+// =========================
+
+if (
+  message.includes("眺望") ||
+  message.includes("景色") ||
+  message.includes("外観")
+) {
+  reply = `
+# 鷹匠マンション 14階の眺望
+
+![view](/view14.jpg)
+`;
+}
+
   // =========================
   // ② 数値入力 → ローン計算
   // =========================
-  if (/\d+/.test(message)) {
+  if (
+  reply === "" &&
+  /^\d+(\.\d+)?\s+\d+(\.\d+)?\s+\d+$/.test(message)
+) {
     const nums = message.match(/\d+(\.\d+)?/g);
 
     if (nums && nums.length >= 3) {
@@ -171,6 +191,7 @@ ${years} 年
   // =========================
   if (reply === "") {
     reply = await callDify(message);
+    console.log(reply);
   }
 
   // =========================
@@ -189,3 +210,4 @@ ${years} 年
   // =========================
   return NextResponse.json({ reply });
 }
+

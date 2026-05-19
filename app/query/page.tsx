@@ -14,12 +14,36 @@ export default function QueryPage() {
   const [chat, setChat] = useState<Chat[]>([
     {
       role: "bot",
-      text:
-        "こんにちは！🏠\n住宅の相談やローンのことなら何でも聞いてください！\n\nローンシミュレーションをしたい場合は『ローン』と入力してください 😊",
+      text: `
+# 🏠 AI住宅コンシェルジュ
+
+以下の相談ができます 😊
+
+- 「お部屋相談」
+- 「住宅ローン」
+- 「間取り相談」
+- 「周辺環境」
+`,
     },
   ]);
 
   const [visible, setVisible] = useState(false);
+
+  const [mode, setMode] = useState<
+  "normal" |
+  "persona" |
+  "room" |
+  "floor" |
+  "view" |
+  "area" |
+  "loan"
+>("normal");
+
+const [persona, setPersona] = useState("");
+
+const [floor, setFloor] = useState("");
+
+const [roomType, setRoomType] = useState("");
 
   // =========================
   // ローン用 state
@@ -54,6 +78,75 @@ export default function QueryPage() {
 
     const userMsg = msg;
 
+    // =========================
+// 間取り相談開始
+// =========================
+
+if (
+  userMsg.includes("間取り相談")
+) {
+
+  setMode("room");
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: `
+# 🏠 間取り相談
+
+どんな暮らしを希望しますか？ 😊
+
+### 例
+- 子育てしやすい
+- 在宅ワーク向け
+- 単身向け
+- 広いリビング
+`,
+    },
+  ]);
+
+  setMsg("");
+
+  return;
+}
+
+    // =========================
+// ペルソナ診断開始
+// =========================
+
+if (
+  userMsg.includes("お部屋相談")
+) {
+  setMode("persona");
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: `
+# あなたの情報を教えてください！
+
+### 選択肢
+- 20代夫婦
+- 子育てファミリー
+- 単身
+- 共働き
+- 投資家
+`,
+    },
+  ]);
+
+  setMsg("");
+
+  return;
+}
+
+      // =========================================
+  // ★ ローン中に他の質問が来たら Dify に送る処理
+  // =========================================
+
+  
     // ユーザー表示
     setChat((prev) => [
       ...prev,
@@ -62,7 +155,200 @@ export default function QueryPage() {
 
     setMsg("");
 
-    // =========================
+// =========================
+// ペルソナ回答
+// =========================
+
+if (mode === "persona") {
+
+  setPersona(userMsg);
+
+  setMode("floor");
+
+  let recommendFloor = "14";
+
+  if (userMsg.includes("投資")) {
+    recommendFloor = "10";
+  }
+
+  if (userMsg.includes("単身")) {
+    recommendFloor = "8";
+  }
+
+  setFloor(recommendFloor);
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: `
+# 🏙 AI分析結果
+
+${userMsg} の場合…
+
+## おすすめ階数
+${recommendFloor}階
+
+### 理由
+- 日当たりが良い
+- 騒音が少ない
+- 将来的な資産価値が高い
+
+「眺望」と入力すると
+おすすめ眺望を表示します 😊
+`,
+    },
+  ]);
+
+  return;
+}
+// =========================
+// 眺望表示
+// =========================
+
+if (
+  mode === "floor" &&
+  userMsg.includes("眺望")
+) {
+  setMode("view");
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: `
+# 🌇 ${floor}階の眺望
+
+- 朝日がしっかり入ります
+- 高層階なので静かです
+- 眺望が抜けています
+
+![眺望](/view14.jpg)
+
+---
+
+## おすすめ間取り
+- 3LDK
+- 72㎡
+- 南向き
+`,
+    },
+  ]);
+
+  return;
+}
+
+// =========================
+// 周辺質問
+// =========================
+
+if (
+  mode === "view" &&
+  userMsg.includes("周辺")
+) {
+
+  setMode("area");
+
+  let suggest = "";
+
+  if (
+    persona.includes("子育て")
+  ) {
+    suggest = `
+### よくある質問 😊
+- 小学校は近い？
+- 公園はある？
+- 病院は？
+`;
+  }
+
+  if (
+    persona.includes("単身")
+  ) {
+    suggest = `
+### よくある質問 😊
+- コンビニ近い？
+- 駅徒歩何分？
+- 治安は？
+`;
+  }
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: `
+# 📍 周辺環境について
+
+${suggest}
+
+気になることを自由に聞いてください 😊
+`,
+    },
+  ]);
+
+  return;
+}
+
+// =========================
+// 間取り提案
+// =========================
+
+if (mode === "room") {
+
+  let room = "3LDK";
+  let image = "/rooms/3ldk.jpg";
+
+  if (
+    userMsg.includes("単身")
+  ) {
+    room = "1LDK";
+    image = "/rooms/1ldk.jpg";
+  }
+
+  if (
+    userMsg.includes("在宅")
+  ) {
+    room = "2LDK + WORK";
+    image = "/rooms/2ldk-work.jpg";
+  }
+
+  setRoomType(room);
+
+  setMode("view");
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: `
+# 🏠 おすすめ間取り
+
+## ${room}
+
+### おすすめポイント
+- 収納が広い
+- 動線が良い
+- 開放感があります
+
+![間取り](${image})
+
+### 立面図
+![立面図](/elevation/${floor}f.jpg)
+
+---
+
+「眺望」と入力すると
+おすすめ眺望も見れます 😊
+`,
+    },
+  ]);
+
+  return;
+}
+
+
+        // =========================
     // ローン開始
     // =========================
 
@@ -71,40 +357,7 @@ export default function QueryPage() {
       userMsg.includes("シミュ") ||
       userMsg.includes("住宅ローン")
     ) {
-      setLoanMode(true);
-
-      setLoanStep("plan");
-
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
-# 🏠 住宅ローン診断を開始します！
-
-まずはプランを選択してください。
-
-### 選択肢
-- 201
-- 202
-- 203
-- 204
-`,
-        },
-      ]);
-
-      return;
-    }
-
-    // =========================
-    // STEP 1 プラン
-    // =========================
-
-    if (loanMode && loanStep === "plan") {
-      setLoanData((prev) => ({
-        ...prev,
-        plan: userMsg,
-      }));
+      setMode("loan");
 
       setLoanStep("family");
 
@@ -113,15 +366,15 @@ export default function QueryPage() {
         {
           role: "bot",
           text: `
-ありがとうございます 😊
+# 🏠 住宅ローン診断を開始します！
 
-現在のご家族構成を教えてください。
+まずは **ご家族構成** を教えてください。
 
 ### 例
 - 夫婦2人
 - 4人家族
 - 単身
-`,
+          `,
         },
       ]);
 
@@ -129,10 +382,10 @@ export default function QueryPage() {
     }
 
     // =========================
-    // STEP 2 家族構成
+    // STEP 1 家族構成
     // =========================
 
-    if (loanMode && loanStep === "family") {
+    if (mode === "loan" && loanStep === "family") {
       setLoanData((prev) => ({
         ...prev,
         family: userMsg,
@@ -145,8 +398,10 @@ export default function QueryPage() {
         {
           role: "bot",
           text: `
-現在の年齢を教えてください 🎂
-`,
+ありがとうございます 😊
+
+次に、現在の **年齢** を教えてください 🎂
+          `,
         },
       ]);
 
@@ -397,19 +652,16 @@ ${Math.round(monthly).toLocaleString()} 円
 ${Math.round(total).toLocaleString()} 円
 
 ---
-
 ご希望であれば、
-
 - 「35年と40年比較」
 - 「金利違い比較」
 - 「無理のない予算診断」
-
 もできます 😊
 `,
         },
       ]);
 
-      setLoanMode(false);
+      setMode("normal");
 
       setLoanStep("");
 
@@ -425,13 +677,22 @@ ${Math.round(total).toLocaleString()} 円
       { role: "bot", text: "考え中..." },
     ]);
 
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({
-        chatId: "test-user",
-        message: userMsg,
-      }),
-    });
+    const res = await fetch("/api/chat-dify", {
+  method: "POST",
+
+  body: JSON.stringify({
+    message: `
+ユーザー属性:
+${persona}
+
+選択階数:
+${floor}階
+
+質問:
+${userMsg}
+`,
+  }),
+});
 
     const data = await res.json();
 
@@ -475,8 +736,8 @@ ${Math.round(total).toLocaleString()} 円
 
     maxWidth:
       c.role === "user"
-        ? "70%"
-        : "820px",
+        ? "75%"
+        : "1000px",
 
     background:
       c.role === "user"
@@ -499,7 +760,7 @@ ${Math.round(total).toLocaleString()} 円
                     <img
                       {...props}
                       style={{
-                        maxWidth: "240px",
+                        maxWidth: "420px",
                         width: "100%",
                         borderRadius: "12px",
                         marginTop: "10px",
@@ -569,7 +830,7 @@ linear-gradient(
   chatArea: {
   flex: 1,
 
-  padding: "32px 20px 120px",
+  padding: "32px 40px 120px",
 
   overflowY: "auto",
 
@@ -588,26 +849,35 @@ linear-gradient(
   },
 
   bubble: {
-  padding: "16px 18px",
-  borderRadius: "24px",
-  maxWidth: "820px",
-  width: "fit-content",
+  padding: "10px 14px",
+
+  borderRadius: "18px",
+
+  maxWidth: "55%",
+
+ width: "70%" ,
 
   fontSize: "15px",
-  lineHeight: 1.8,
-  letterSpacing: "0.01em",
+
+  lineHeight: 1.,
+
+  letterSpacing: "0",
 
   whiteSpace: "pre-wrap",
+
   wordBreak: "break-word",
+
   overflowWrap: "break-word",
 
   backdropFilter: "blur(12px)",
+
   WebkitBackdropFilter: "blur(12px)",
 
   boxShadow:
     "0 10px 30px rgba(15,23,42,0.08)",
 
-  border: "1px solid rgba(255,255,255,0.18)",
+  border:
+    "1px solid rgba(255,255,255,0.18)",
 
   transition:
     "all 0.25s cubic-bezier(.4,0,.2,1)",

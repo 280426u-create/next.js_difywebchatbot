@@ -367,6 +367,14 @@ export default function Page() {
 
         <ChatBot />
       </main>
+     
+
+      <script
+        id="dify-script"
+        src="https://udify.app/embed.min.js"
+        defer
+      ></script>
+      
     </>
   );
 }
