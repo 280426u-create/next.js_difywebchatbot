@@ -207,7 +207,7 @@ ${recommendFloor}階
 // =========================
 
 if (
-  mode === "floor" &&
+  (mode === "floor" || mode === "view") &&
   userMsg.includes("眺望")
 ) {
   setMode("view");
