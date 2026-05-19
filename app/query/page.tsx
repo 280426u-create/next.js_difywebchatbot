@@ -334,7 +334,7 @@ if (mode === "room") {
 ![間取り](${image})
 
 ### 立面図
-![立面図](/elevation/${floor}f.jpg)
+![立面図](/elevation/${floor || "14"}f.jpg)
 
 ---
 
