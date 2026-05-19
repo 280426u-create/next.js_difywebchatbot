@@ -49,7 +49,7 @@ const [roomType, setRoomType] = useState("");
   // ローン用 state
   // =========================
 
-  const [loanMode, setLoanMode] = useState(false);
+  
 
   const [loanStep, setLoanStep] = useState("");
 
@@ -412,7 +412,7 @@ if (mode === "room") {
     // STEP 3 年齢
     // =========================
 
-    if (loanMode && loanStep === "age") {
+    if (mode === "loan" && loanStep === "age") {
       setLoanData((prev) => ({
         ...prev,
         age: userMsg,
@@ -441,7 +441,7 @@ if (mode === "room") {
     // STEP 4 年収
     // =========================
 
-    if (loanMode && loanStep === "income") {
+    if (mode === "loan" && loanStep === "income") {
       setLoanData((prev) => ({
         ...prev,
         income: userMsg,
@@ -470,7 +470,7 @@ if (mode === "room") {
     // STEP 5 物件価格
     // =========================
 
-    if (loanMode && loanStep === "price") {
+    if (mode === "loan" && loanStep === "price") {
       const price =
         Number(userMsg.replace(/[^0-9]/g, "")) *
         10000;
@@ -501,7 +501,7 @@ if (mode === "room") {
     // STEP 6 頭金
     // =========================
 
-    if (loanMode && loanStep === "down") {
+    if (mode === "loan" && loanStep === "down") {
       const down =
         Number(userMsg.replace(/[^0-9]/g, "")) *
         10000;
@@ -535,7 +535,7 @@ if (mode === "room") {
     // STEP 7 希望返済額
     // =========================
 
-    if (loanMode && loanStep === "monthly") {
+    if (mode === "loan" && loanStep === "monthly") {
       setLoanData((prev) => ({
         ...prev,
         monthlyHope: userMsg,
@@ -566,7 +566,7 @@ if (mode === "room") {
     // STEP 8 年数
     // =========================
 
-    if (loanMode && loanStep === "years") {
+    if (mode === "loan" && loanStep === "years") {
       const years = Number(
         userMsg.replace(/[^0-9]/g, "")
       );
@@ -600,7 +600,7 @@ if (mode === "room") {
     // STEP 9 金利 → 結果
     // =========================
 
-    if (loanMode && loanStep === "rate") {
+    if (mode === "loan" && loanStep === "rate") {
       const rate = Number(userMsg);
 
       const finalData = {
@@ -859,7 +859,7 @@ linear-gradient(
 
   fontSize: "15px",
 
-  lineHeight: 1.,
+  lineHeight: 1.5,
 
   letterSpacing: "0",
 
