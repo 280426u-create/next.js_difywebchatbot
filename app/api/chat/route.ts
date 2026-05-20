@@ -195,15 +195,21 @@ ${years} 年
   }
 
   // =========================
-  // ④ Supabase保存
-  // =========================
-  await supabase.from("chat_logs").insert({
-    chat_id: chatId,
+// ④ Supabase保存
+// =========================
+const { data, error } = await supabase
+  .from("chat_logs")
+  .insert({
+    chat_id: chatId || "test-user",
     user_message: message,
     bot_message: reply,
     user_words: extractWords(message),
     bot_words: extractWords(reply),
-  });
+  })
+  .select();
+
+console.log("INSERT DATA:", data);
+console.log("INSERT ERROR:", error);
 
   // =========================
   // 返却
