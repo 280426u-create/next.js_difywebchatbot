@@ -17,60 +17,58 @@ export default function ChatBot() {
   ]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+  if (!input.trim()) return;
 
-    const userText = input;
+  const userText = input;
+
+  setMessages((prev) => [
+    ...prev,
+    { from: "user", text: userText },
+  ]);
+
+  setInput("");
+  setLoading(true);
+
+  try {
+    const res = await fetch("/api/cofi", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: userText }), // ← 重要
+    });
+
+    const data = await res.json();
+
+    let reply =
+  data.answer ||
+  data.raw ||
+  data.message || // 追加
+  "エラーが発生しました";
+
+if (typeof reply !== "string") {
+  reply = JSON.stringify(reply, null, 2);   // ← これが重要！
+}
 
     setMessages((prev) => [
       ...prev,
-      { from: "user", text: userText },
+      {
+        from: "bot",
+        text: reply,
+      },
     ]);
+  } catch (error: unknown) {
+    setMessages((prev) => [
+      ...prev,
+      {
+        from: "bot",
+        text: "通信エラーが発生しました😭",
+      },
+    ]);
+  }
 
-    setInput("");
-
-    setLoading(true);
-
-    try {
-      
-
-      const res = await fetch("/api/cofi", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-         
-          query: userText,
-          
-        }),
-      });
-
-      const data = await res.json();
-
-      const reply =
-        data.answer || "エラーが発生しました";
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: reply,
-        },
-      ]);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: "通信エラーが発生しました😭",
-        },
-      ]);
-    }
-
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   return (
     <>
