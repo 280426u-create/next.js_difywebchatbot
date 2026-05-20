@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.DIFY_API_KEY}`, // ★APIキー
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_DIFY_API_KEY}`, // ★APIキー
       },
       body: JSON.stringify({
         inputs: {},
