@@ -22,28 +22,32 @@ function extractWords(text: string) {
 function detectPersona(message: string) {
   const msg = message;
 
-  // 50代夫婦 / 年収800-900 / 二人暮らし
+  // 50代夫婦
   if (
-    msg.includes("50") ||
-    msg.includes("夫婦") ||
-    msg.includes("二人") ||
-    msg.match(/800|900/)
+    /50代/.test(msg) ||
+    /夫婦/.test(msg) ||
+    /二人暮らし/.test(msg) ||
+    /800万円|900万円/.test(msg)
   ) {
     return "P1";
   }
 
-  // 30代女性一人暮らし / 年収450-550
+  // 30代女性
   if (
-    msg.includes("30") ||
-    msg.includes("女性") ||
-    msg.includes("一人暮らし") ||
-    msg.match(/450|500|550/)
+    /30代/.test(msg) ||
+    /女性/.test(msg) ||
+    /一人暮らし/.test(msg) ||
+    /450万円|500万円|550万円/.test(msg)
   ) {
     return "P2";
   }
 
-  // 40代ファミリー / 子供がいる / 年収1000
-  if (msg.includes("40") || msg.includes("子") || msg.match(/1000/)) {
+  // 40代ファミリー
+  if (
+    /40代/.test(msg) ||
+    /子供/.test(msg) ||
+    /1000万円/.test(msg)
+  ) {
     return "P3";
   }
 
