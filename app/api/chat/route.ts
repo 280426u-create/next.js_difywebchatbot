@@ -127,8 +127,8 @@ export async function POST(req: Request) {
       bot_words: extractWords(reply),
     });
 
-  console.log("data:", data);
-  console.log("error:", error);
+  console.log("INSERT DATA:", data);
+  console.log("INSERT ERROR:", error);
 
   return NextResponse.json({ reply });
 }
