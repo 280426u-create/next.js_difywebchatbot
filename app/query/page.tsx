@@ -672,10 +672,12 @@ ${Math.round(total).toLocaleString()} 円
       { role: "bot", text: "考え中..." },
     ]);
 
-    const res = await fetch("/api/chat-dify", {
+    const res = await fetch("/api/chat", {
   method: "POST",
 
   body: JSON.stringify({
+    chatId: "test-user",
+
     message: `
 ユーザー属性:
 ${persona}
