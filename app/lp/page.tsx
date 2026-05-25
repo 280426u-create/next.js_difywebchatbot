@@ -47,7 +47,8 @@ export default function Page() {
         style={{
           fontFamily: "sans-serif",
           minHeight: "100vh",
-          background: "linear-gradient(180deg,#f8fafc,#eef2ff)",
+          background:
+  "linear-gradient(to bottom,#f8fafc,#eff6ff,#ffffff)",
           paddingTop: "80px",
         }}
       >
@@ -113,24 +114,21 @@ export default function Page() {
 
             </p>
 
-            <div style={{ marginTop: "50px" }}>
-              <Link
-                href="/query"
-                style={{
-                  padding: "18px 48px",
-                  background: "linear-gradient(90deg,#2563eb,#7c3aed)",
-                  color: "#fff",
-                  borderRadius: "999px",
-                  textDecoration: "none",
-                }}
-              >
-                ダウンロードはこちらから
-              </Link>
-            </div>
+            
           </section>
 
           {/* アプリ紹介 */}
-        <section style={{ marginBottom: "100px" }}>
+        <section
+  style={{
+    marginBottom: "100px",
+
+    opacity: show ? 1 : 0,
+    transform: show
+      ? "translateY(0)"
+      : "translateY(40px)",
+    transition: "0.8s ease",
+  }}
+>
           <h2 style={{ textAlign: "center", fontSize: "32px", marginBottom: "40px" }}>
             アプリ紹介
           </h2>
@@ -150,12 +148,28 @@ export default function Page() {
               <div
                 key={i}
                 style={{
-                  padding: "30px",
-                  borderRadius: "16px",
-                  background: "#fff",
-                  boxShadow: "0 15px 40px rgba(0,0,0,0.08)",
-                }}
-              >
+    padding: "35px",
+    borderRadius: "24px",
+    background: "rgba(255,255,255,0.9)",
+    backdropFilter: "blur(10px)",
+    boxShadow:
+      "0 10px 40px rgba(0,0,0,0.08)",
+    transition: "all .3s ease",
+    cursor: "pointer",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform =
+      "translateY(-8px)";
+    e.currentTarget.style.boxShadow =
+      "0 20px 60px rgba(0,0,0,0.12)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform =
+      "translateY(0)";
+    e.currentTarget.style.boxShadow =
+      "0 10px 40px rgba(0,0,0,0.08)";
+  }}
+>
                 {text}
               </div>
             ))}
@@ -188,39 +202,93 @@ export default function Page() {
         </section>
 
         {/* 来場特典 */}
-        <section style={{ textAlign: "center", marginBottom: "120px" }}>
+        <section
+  style={{
+    textAlign: "center",
+    marginBottom: "140px",
+    position: "relative",
+    overflow: "hidden",
+    padding: "40px 20px",
+  }}
+>
+  <div
+  style={{
+    position: "absolute",
+    width: "500px",
+    height: "500px",
+    background:
+      "radial-gradient(circle,rgba(34,197,94,0.15),transparent 70%)",
+    top: "-180px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    zIndex: 0,
+  }}
+/>
           <div
-            style={{
-              border: "6px dashed #16a34a",
-              borderRadius: "20px",
-              padding: "60px 40px",
-              display: "inline-block",
-              background: "#f9fafb",
-            }}
-          >
+  style={{
+    maxWidth: "760px",
+    margin: "0 auto",
+    padding: "80px 50px",
+    borderRadius: "32px",
+    background: "rgba(255,255,255,0.9)",
+    backdropFilter: "blur(12px)",
+    WebkitBackdropFilter: "blur(12px)",
+    boxShadow:
+      "0 25px 80px rgba(0,0,0,0.08)",
+    border: "1px solid rgba(255,255,255,0.4)",
+    position: "relative",
+    zIndex: 1,
+  }}
+>
             <p style={{ fontSize: "26px", fontWeight: "bold", marginBottom: "50px" }}>
               来場者限定特典
             </p>
 
             <Link
-              href="/query"
-              style={{
-                padding: "22px 60px",
-                background: "linear-gradient(90deg,#16a34a,#22c55e)",
-                color: "#fff",
-                borderRadius: "999px",
-                fontSize: "22px",
-                textDecoration: "none",
-              }}
-            >
-              ダウンロードはこちら
-            </Link>
+  href="/query"
+  style={{
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "12px",
+    padding: "20px 48px",
+    background:
+      "linear-gradient(135deg,#166534,#16a34a)",
+    color: "#fff",
+    borderRadius: "999px",
+    fontSize: "18px",
+    fontWeight: "bold",
+    textDecoration: "none",
+    letterSpacing: "0.5px",
+    boxShadow:
+      "0 15px 35px rgba(22,163,74,0.35)",
+    transition: "all .3s ease",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform =
+      "translateY(-3px)";
+    e.currentTarget.style.boxShadow =
+      "0 20px 45px rgba(22,163,74,0.45)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform =
+      "translateY(0)";
+    e.currentTarget.style.boxShadow =
+      "0 15px 35px rgba(22,163,74,0.35)";
+  }}
+>
+  無料でアプリを体験する
+  <span style={{ fontSize: "20px" }}>→</span>
+</Link> 
           </div>
         </section>
       </div>
 
         {/* 🔥 お問い合わせフォーム（追加分） */}
-<section style={{ textAlign: "center", marginBottom: "120px" }}>
+<section style={{ textAlign: "center", marginBottom: "120px" ,opacity: show ? 1 : 0,
+transform: show
+  ? "translateY(0)"
+  : "translateY(40px)",
+transition: "0.8s ease",}}>
   <div
     style={{
       maxWidth: "900px",
