@@ -72,7 +72,19 @@ const [roomType, setRoomType] = useState("");
   // =========================
   // メッセージ送信
   // =========================
-
+  async function saveLog(user: string, bot: string) {
+  await fetch("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      chatId: "test-user",
+      message: user,
+      forceReply: bot,
+    }),
+  });
+}
   async function send() {
     if (!msg) return;
 
