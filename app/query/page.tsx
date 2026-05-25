@@ -94,8 +94,20 @@ const [roomType, setRoomType] = useState("");
 // 間取り相談開始
 // =========================
 
+const roomKeywords = [
+  "間取り",
+  "部屋",
+  "お部屋",
+  "部屋探し",
+  "部屋の相談",
+  "間取り相談",
+  "レイアウト",
+];
+
 if (
-  userMsg.includes("間取り相談")
+  roomKeywords.some((word) =>
+    userMsg.includes(word)
+  )
 ) {
 
   setMode("room");
@@ -122,7 +134,6 @@ if (
 
   return;
 }
-
     // =========================
 // ペルソナ診断開始
 // =========================
@@ -229,20 +240,12 @@ if (
     {
       role: "bot",
       text: `
-# 🌇 ${floor}階の眺望
-
+# 🌇 ${floor}14階の眺望
 - 朝日がしっかり入ります
 - 高層階なので静かです
 - 眺望が抜けています
 
 ![眺望](/view14.jpg)
-
----
-
-## おすすめ間取り
-- 3LDK
-- 72㎡
-- 南向き
 `,
     },
   ]);
@@ -312,7 +315,7 @@ if (mode === "room") {
   let image = "/rooms/3ldk.jpg";
 
   if (
-    userMsg.includes("単身")
+    userMsg.includes("広いリビング")
   ) {
     room = "1LDK";
     image = "/rooms/1ldk.jpg";
@@ -351,7 +354,7 @@ if (mode === "room") {
 ---
 
 「眺望」と入力すると
-おすすめ眺望も見れます 😊
+この階層の眺望も見れます 😊
 `,
     },
   ]);
