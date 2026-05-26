@@ -97,9 +97,12 @@ async function callDify(message: string) {
 // POST
 // =========================
 export async function POST(req: Request) {
-  const { chatId, message } = await req.json();
-
-  let reply = "";
+  const {
+  chatId,
+  message,
+  forceReply,
+} = await req.json();
+  let reply = forceReply || "";
 
   // =========================
   // ① ペルソナ判定

@@ -112,11 +112,7 @@ if (
 
   setMode("room");
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: `
+  const botReply = `
 # 🏠 間取り相談
 
 どんな暮らしを希望しますか？ 😊
@@ -126,13 +122,21 @@ if (
 - 在宅ワーク向け
 - 単身向け
 - 広いリビング
-`,
-    },
-  ]);
+`;
 
-  setMsg("");
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
 
-  return;
+await saveLog(userMsg, botReply);
+
+setMsg("");
+
+return;
 }
     // =========================
 // ペルソナ診断開始
@@ -143,11 +147,7 @@ if (
 ) {
   setMode("persona");
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: `
+  const botReply = `
 # あなたの情報を教えてください！
 
 ### 選択肢
@@ -156,13 +156,21 @@ if (
 - 単身
 - 共働き
 - 投資家
-`,
-    },
-  ]);
+`;
 
-  setMsg("");
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
 
-  return;
+await saveLog(userMsg, botReply);
+
+setMsg("");
+
+return;
 }
 
       // =========================================
@@ -200,11 +208,7 @@ if (mode === "persona") {
 
   setFloor(recommendFloor);
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: `
+  const botReply = `
 # 🏙 AI分析結果
 
 ${userMsg} の場合…
@@ -219,11 +223,19 @@ ${recommendFloor}階
 
 「眺望」と入力すると
 おすすめ眺望を表示します 😊
-`,
-    },
-  ]);
+`;
 
-  return;
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
+
+await saveLog(userMsg, botReply);
+
+return;
 }
 // =========================
 // 眺望表示
@@ -235,22 +247,27 @@ if (
 ) {
   setMode("view");
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: `
+  const botReply = `
 # 🌇 ${floor}14階の眺望
+
 - 朝日がしっかり入ります
 - 高層階なので静かです
 - 眺望が抜けています
 
 ![眺望](/view14.jpg)
-`,
-    },
-  ]);
+`;
 
-  return;
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
+
+await saveLog(userMsg, botReply);
+
+return;
 }
 
 // =========================
