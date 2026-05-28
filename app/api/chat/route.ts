@@ -103,6 +103,10 @@ export async function POST(req: Request) {
   forceReply,
 } = await req.json();
   let reply = forceReply || "";
+  // Front側から強制返信が来た場合
+if (forceReply) {
+  reply = forceReply;
+}
 
   // =========================
   // ① ペルソナ判定

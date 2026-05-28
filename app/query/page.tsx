@@ -123,7 +123,6 @@ if (
 - 単身向け
 - 広いリビング
 `;
-
 setChat((prev) => [
   ...prev,
   {
@@ -305,21 +304,25 @@ if (
 `;
   }
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: `
+  const botReply = `
 # 📍 周辺環境について
 
 ${suggest}
 
 気になることを自由に聞いてください 😊
-`,
-    },
-  ]);
+`;
 
-  return;
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
+
+await saveLog(userMsg, botReply);
+
+return;
 }
 
 // =========================
@@ -349,11 +352,7 @@ if (mode === "room") {
 
   setMode("view");
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: `
+  const botReply = `
 # 🏠 おすすめ間取り
 
 ## ${room}
@@ -367,16 +366,22 @@ if (mode === "room") {
 
 ### 立面図
 ![立面図](/elevation/${floor || "14"}f.jpg)
-
 ---
-
 「眺望」と入力すると
 この階層の眺望も見れます 😊
-`,
-    },
-  ]);
+`;
 
-  return;
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
+
+await saveLog(userMsg, botReply);
+
+return;
 }
 
 
@@ -393,11 +398,7 @@ if (mode === "room") {
 
       setLoanStep("family");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 # 🏠 住宅ローン診断を開始します！
 
 まずは **ご家族構成** を教えてください。
@@ -406,11 +407,19 @@ if (mode === "room") {
 - 夫婦2人
 - 4人家族
 - 単身
-          `,
-        },
-      ]);
+`;
 
-      return;
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
+
+await saveLog(userMsg, botReply);
+
+return;
     }
 
     // =========================
@@ -425,19 +434,23 @@ if (mode === "room") {
 
       setLoanStep("age");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 ありがとうございます 😊
 
 次に、現在の **年齢** を教えてください 🎂
-          `,
-        },
-      ]);
+`;
 
-      return;
+setChat((prev) => [
+  ...prev,
+  {
+    role: "bot",
+    text: botReply,
+  },
+]);
+
+await saveLog(userMsg, botReply);
+
+return;
     }
 
     // =========================
@@ -452,19 +465,19 @@ if (mode === "room") {
 
       setLoanStep("income");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply =`
 世帯年収を教えてください 💰
 
 ### 例
 - 450万円
 - 700万円
-`,
-        },
-      ]);
+`;
+setChat((prev) =>[
+  ...prev,{role:"bot",
+    text:botReply,
+  },
+]);
+       await saveLog(userMsg,botReply);
 
       return;
     }
@@ -481,19 +494,19 @@ if (mode === "room") {
 
       setLoanStep("price");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 購入予定の物件価格を教えてください 🏠
 
 ### 例
 - 3500万円
 - 4200万円
-`,
+`;
+      setChat((prev) =>[
+        ...prev,{role:"bot",
+          text:botReply,
         },
       ]);
+       await saveLog(userMsg,botReply);
 
       return;
     }
@@ -514,17 +527,17 @@ if (mode === "room") {
 
       setLoanStep("down");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 頭金の予定額を教えてください ✨
 
 ※ なしの場合は「0」
-`,
+`;
+      setChat((prev) =>[
+        ...prev,{role:"bot",
+          text:botReply,
         },
       ]);
+       await saveLog(userMsg,botReply);
 
       return;
     }
@@ -545,20 +558,20 @@ if (mode === "room") {
 
       setLoanStep("monthly");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 毎月の希望返済額はありますか？ 😊
 
 ### 例
 - 8万円
 - 10万円
 - 特になし
-`,
+`;
+      setChat((prev) =>[
+        ...prev,{role:"bot",
+          text:botReply,
         },
       ]);
+       await saveLog(userMsg,botReply);
 
       return;
     }
@@ -575,11 +588,7 @@ if (mode === "room") {
 
       setLoanStep("years");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 返済年数を選択してください 📅
 
 ### 選択肢
@@ -587,10 +596,13 @@ if (mode === "room") {
 - 30年
 - 35年
 - 40年
-`,
+`;
+      setChat((prev) =>[
+        ...prev,{role:"bot",
+          text:botReply,
         },
       ]);
-
+       await saveLog(userMsg,botReply);
       return;
     }
 
@@ -610,20 +622,20 @@ if (mode === "room") {
 
       setLoanStep("rate");
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 最後に、想定金利を入力してください 📈
 
 ### 例
 - 0.7
 - 0.8
 - 1.2
-`,
+`;
+      setChat((prev) =>[
+        ...prev,{role:"bot",
+          text:botReply,
         },
       ]);
+       await saveLog(userMsg,botReply);
 
       return;
     }
@@ -657,11 +669,7 @@ if (mode === "room") {
       const total =
         monthly * finalData.years * 12;
 
-      setChat((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text: `
+      const botReply = `
 # 🏠 ローン診断結果
 
 ## お客様情報
@@ -682,18 +690,19 @@ ${Math.round(monthly).toLocaleString()} 円
 
 ## 総返済額
 ${Math.round(total).toLocaleString()} 円
-
-
-`,
+`;
+        
+      setChat((prev) =>[
+        ...prev,{role:"bot",
+          text:botReply,
         },
       ]);
-
-      setMode("normal");
-
-      setLoanStep("");
-
-      return;
+       await saveLog(userMsg,botReply);
+       setMode("normal");
+setLoanStep("");
+return;
     }
+    
 
     // =========================
     // 通常AIチャット
