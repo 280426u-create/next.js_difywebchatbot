@@ -182,7 +182,7 @@ return;
       // =========================================
   // ★ ローン中に他の質問が来たら Dify に送る処理
   // =========================================
-  
+
 // =========================
 // ペルソナ回答
 // =========================
@@ -329,22 +329,46 @@ return;
 
 if (mode === "room") {
 
-  let room = "3LDK";
-  let image = "/rooms/3ldk.jpg";
+  const roomPatterns = [
+  {
+    keyword: "子育て",
+    room: "3LDK",
+    image: "/rooms/3ldk-family.jpg",
+    point: "家族で暮らしやすい広々設計",
+  },
 
-  if (
-    userMsg.includes("広いリビング")
-  ) {
-    room = "1LDK";
-    image = "/rooms/1ldk.jpg";
-  }
+  {
+    keyword: "在宅",
+    room: "2LDK + WORK",
+    image: "/rooms/2ldk-work.jpg",
+    point: "ワークスペース付き",
+  },
 
-  if (
-    userMsg.includes("在宅")
-  ) {
-    room = "2LDK + WORK";
-    image = "/rooms/2ldk-work.jpg";
-  }
+  {
+    keyword: "単身",
+    room: "1K",
+    image: "/rooms/1k.jpg",
+    point: "単身向けコンパクト設計",
+  },
+
+  {
+    keyword: "広いリビング",
+    room: "1LDK",
+    image: "/rooms/1ldk.jpg",
+    point: "開放感あるリビング",
+  },
+];
+
+const matched =
+  roomPatterns.find((r) =>
+    userMsg.includes(r.keyword)
+  ) || roomPatterns[0];
+
+const room = matched.room;
+
+const image = matched.image;
+
+const point = matched.point;
 
   setRoomType(room);
 
@@ -356,9 +380,9 @@ if (mode === "room") {
 ## ${room}
 
 ### おすすめポイント
+- ${point}
 - 収納が広い
 - 動線が良い
-- 開放感があります
 
 ![間取り](${image})
 
