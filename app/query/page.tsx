@@ -89,6 +89,13 @@ const [roomType, setRoomType] = useState("");
     if (!msg) return;
 
     const userMsg = msg;
+    // 先にユーザー吹き出し追加
+setChat((prev) => [
+  ...prev,
+  { role: "user", text: userMsg },
+]);
+
+setMsg("");
 
     // =========================
 // 間取り相談開始
@@ -175,16 +182,7 @@ return;
       // =========================================
   // ★ ローン中に他の質問が来たら Dify に送る処理
   // =========================================
-
   
-    // ユーザー表示
-    setChat((prev) => [
-      ...prev,
-      { role: "user", text: userMsg },
-    ]);
-
-    setMsg("");
-
 // =========================
 // ペルソナ回答
 // =========================
