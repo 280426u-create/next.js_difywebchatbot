@@ -332,29 +332,49 @@ if (mode === "room") {
   const roomPatterns = [
   {
     keyword: "子育て",
-    room: "3LDK",
-    image: "/rooms/3ldk-family.jpg",
-    point: "家族で暮らしやすい広々設計",
+
+    room1: "3LDK",
+    image1: "/rooms/3ldk-family.jpg",
+
+    room2: "4LDK",
+    image2: "/rooms/4ldk-family2.jpg",
+
+    point: "家族向け広々設計",
   },
 
   {
     keyword: "在宅",
-    room: "2LDK + WORK",
-    image: "/rooms/2ldk-work.jpg",
+
+    room1: "2LDK + WORK",
+    image1: "/rooms/2ldk-work.jpg",
+
+    room2: "1LDK + WORK",
+    image2: "/rooms/1ldk-work.jpg",
+
     point: "ワークスペース付き",
   },
 
   {
     keyword: "単身",
-    room: "1K",
-    image: "/rooms/1k.jpg",
-    point: "単身向けコンパクト設計",
+
+    room1: "1K",
+    image1: "/rooms/1k.jpg",
+
+    room2: "1LDK",
+    image2: "/rooms/1ldk-single.jpg",
+
+    point: "単身向け設計",
   },
 
   {
     keyword: "広いリビング",
-    room: "1LDK",
-    image: "/rooms/1ldk.jpg",
+
+    room1: "1LDK",
+    image1: "/rooms/1ldk.jpg",
+
+    room2: "2LDK",
+    image2: "/rooms/2ldk-wide.jpg",
+
     point: "開放感あるリビング",
   },
 ];
@@ -364,9 +384,13 @@ const matched =
     userMsg.includes(r.keyword)
   ) || roomPatterns[0];
 
-const room = matched.room;
+const room1 = matched.room1;
+const image1 = matched.image1;
 
-const image = matched.image;
+const room2 = matched.room2;
+const image2 = matched.image2;
+
+const point = matched.point;
 
 const point = matched.point;
 
@@ -375,20 +399,39 @@ const point = matched.point;
   setMode("view");
 
   const botReply = `
-# 🏠 おすすめ間取り
+# 🏠 おすすめ間取り比較
 
-## ${room}
+<div style="display:flex; gap:20px; flex-wrap:wrap;">
+
+<div style="flex:1; min-width:260px;">
+
+## ${room1}
+
+![間取り1](${image1})
+
+![立面図1](/elevation/${floor || "14"}f.jpg)
+
+</div>
+
+<div style="flex:1; min-width:260px;">
+
+## ${room2}
+
+![間取り2](${image2})
+
+![立面図2](/elevation/${floor || "14"}f.jpg)
+
+</div>
+
+</div>
+
+---
 
 ### おすすめポイント
 - ${point}
 - 収納が広い
 - 動線が良い
 
-![間取り](${image})
-
-### 立面図
-![立面図](/elevation/${floor || "14"}f.jpg)
----
 「眺望」と入力すると
 この階層の眺望も見れます 😊
 `;
