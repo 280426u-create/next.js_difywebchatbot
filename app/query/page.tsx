@@ -22,7 +22,7 @@ export default function QueryPage() {
 - 「お部屋相談」
 - 「住宅ローン」
 - 「間取り相談」
-- 「周辺環境」
+- 「周辺環境」（未完成）
 `,
     },
   ]);
@@ -238,67 +238,78 @@ return;
 // 眺望表示
 // =========================
 
-if (
-  mode === "view" &&
-  (
-    userMsg.includes("眺望") ||
-    userMsg.includes("AType") ||
-    userMsg.includes("KType") ||
-    userMsg.includes("EType") ||
-    userMsg.includes("HType") ||
-    userMsg.includes("CType") ||
-    userMsg.includes("DType")
-  )
-) {
+if (mode === "view") {
 
-  let viewImage = roomType;
+  const lowerMsg = userMsg.toLowerCase();
 
-  if (userMsg.includes("AType")) {
-    viewImage = "/views/typea.jpg";
+  let viewImage = "/views/typea.png";
+
+  if (lowerMsg.includes("atype")) {
+    viewImage = "/views/typea.png";
   }
 
-  if (userMsg.includes("KType")) {
-    viewImage = "/views/typek.jpg";
+  if (lowerMsg.includes("ktype")) {
+    viewImage = "/views/typek.png";
   }
 
-  if (userMsg.includes("EType")) {
-    viewImage = "/views/typee.jpg";
+  if (lowerMsg.includes("etype")) {
+    viewImage = "/views/typee.png";
   }
 
-  if (userMsg.includes("HType")) {
-    viewImage = "/views/typeh.jpg";
+  if (lowerMsg.includes("htype")) {
+    viewImage = "/views/typeh.png";
   }
 
-  if (userMsg.includes("CType")) {
-    viewImage = "/views/typec.jpg";
+  if (lowerMsg.includes("ctype")) {
+    viewImage = "/views/typec.png";
   }
 
-  if (userMsg.includes("DType")) {
-    viewImage = "/views/typed2.jpg";
+  if (lowerMsg.includes("dtype")) {
+    viewImage = "/views/typd2.png";
   }
 
-  const botReply = `
-# 🌇 おすすめ眺望
+  if (
+    lowerMsg.includes("眺望") ||
+    lowerMsg.includes("atype") ||
+    lowerMsg.includes("ktype") ||
+    lowerMsg.includes("etype") ||
+    lowerMsg.includes("htype") ||
+    lowerMsg.includes("ctype") ||
+    lowerMsg.includes("dtype")
+  ) {
+
+    const selectedType =
+  lowerMsg.includes("atype") ? "AType" :
+  lowerMsg.includes("ktype") ? "KType" :
+  lowerMsg.includes("etype") ? "EType" :
+  lowerMsg.includes("htype") ? "HType" :
+  lowerMsg.includes("ctype") ? "CType" :
+  lowerMsg.includes("dtype") ? "DType" :
+  roomType;
+
+const botReply = `
+# 🌇 ${selectedType}のお部屋から見た眺望
 
 ![眺望](${viewImage})
 
 - 日当たり良好
 - 開放感があります
+---
+他にご相談はありますか？ 😊
 `;
+    setChat((prev) => [
+      ...prev,
+      {
+        role: "bot",
+        text: botReply,
+      },
+    ]);
 
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: botReply,
-    },
-  ]);
+    await saveLog(userMsg, botReply);
 
-  await saveLog(userMsg, botReply);
-
-  return;
+    return;
+  }
 }
-
 // =========================
 // 周辺質問
 // =========================
