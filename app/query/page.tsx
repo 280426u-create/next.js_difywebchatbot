@@ -333,35 +333,35 @@ if (mode === "room") {
   {
     keyword: "子育て",
 
-    room1: "3LDK",
-    image1: "/rooms/3ldk-family.jpg",
+    room1: "AType 3LDK",
+    image1: "/rooms/typea.jpg",
 
-    room2: "4LDK",
-    image2: "/rooms/4ldk-family2.jpg",
+    room2: "KType 4LDK",
+    image2: "/rooms/typek.jpg",
 
-    point: "家族向け広々設計",
+    point: "ウォークインクローゼット付き",
   },
 
   {
     keyword: "在宅",
 
-    room1: "2LDK + WORK",
-    image1: "/rooms/2ldk-work.jpg",
+    room1: "EType 1LDK",
+    image1: "/rooms/typee.jpg",
 
-    room2: "1LDK + WORK",
-    image2: "/rooms/1ldk-work.jpg",
+    room2: "HType 1LDK",
+    image2: "/rooms/typeh.jpg",
 
-    point: "ワークスペース付き",
+    point: "収納スペースが充実",
   },
 
   {
     keyword: "単身",
 
-    room1: "1K",
-    image1: "/rooms/1k.jpg",
+    room1: "EType 1LDK",
+    image1: "/rooms/typee.jpg",
 
-    room2: "1LDK",
-    image2: "/rooms/1ldk-single.jpg",
+    room2: "HType 1LDK",
+    image2: "/rooms/typeh.jpg",
 
     point: "単身向け設計",
   },
@@ -369,11 +369,11 @@ if (mode === "room") {
   {
     keyword: "広いリビング",
 
-    room1: "1LDK",
-    image1: "/rooms/1ldk.jpg",
+    room1: "CType 3LDK",
+    image1: "/rooms/typec.jpg",
 
-    room2: "2LDK",
-    image2: "/rooms/2ldk-wide.jpg",
+    room2: "DType 2LDK",
+    image2: "/rooms/typed2.jpg",
 
     point: "開放感あるリビング",
   },
@@ -392,18 +392,12 @@ const image2 = matched.image2;
 
 const point = matched.point;
 
-const point = matched.point;
-
-  setRoomType(room);
+  setRoomType(room1);
 
   setMode("view");
 
   const botReply = `
 # 🏠 おすすめ間取り比較
-
-<div style="display:flex; gap:20px; flex-wrap:wrap;">
-
-<div style="flex:1; min-width:260px;">
 
 ## ${room1}
 
@@ -411,9 +405,7 @@ const point = matched.point;
 
 ![立面図1](/elevation/${floor || "14"}f.jpg)
 
-</div>
-
-<div style="flex:1; min-width:260px;">
+---
 
 ## ${room2}
 
@@ -421,19 +413,13 @@ const point = matched.point;
 
 ![立面図2](/elevation/${floor || "14"}f.jpg)
 
-</div>
-
-</div>
-
 ---
 
-### おすすめポイント
-- ${point}
-- 収納が広い
-- 動線が良い
+### 特徴
+${point}
 
 「眺望」と入力すると
-この階層の眺望も見れます 😊
+おすすめ眺望も見れます 😊
 `;
 
 setChat((prev) => [
