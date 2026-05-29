@@ -239,32 +239,65 @@ return;
 // =========================
 
 if (
-  (mode === "floor" || mode === "view") &&
-  userMsg.includes("眺望")
+  mode === "view" &&
+  (
+    userMsg.includes("眺望") ||
+    userMsg.includes("AType") ||
+    userMsg.includes("KType") ||
+    userMsg.includes("EType") ||
+    userMsg.includes("HType") ||
+    userMsg.includes("CType") ||
+    userMsg.includes("DType")
+  )
 ) {
-  setMode("view");
+
+  let viewImage = roomType;
+
+  if (userMsg.includes("AType")) {
+    viewImage = "/views/typea.jpg";
+  }
+
+  if (userMsg.includes("KType")) {
+    viewImage = "/views/typek.jpg";
+  }
+
+  if (userMsg.includes("EType")) {
+    viewImage = "/views/typee.jpg";
+  }
+
+  if (userMsg.includes("HType")) {
+    viewImage = "/views/typeh.jpg";
+  }
+
+  if (userMsg.includes("CType")) {
+    viewImage = "/views/typec.jpg";
+  }
+
+  if (userMsg.includes("DType")) {
+    viewImage = "/views/typed2.jpg";
+  }
 
   const botReply = `
-# 🌇 ${floor}14階の眺望
+# 🌇 おすすめ眺望
 
-- 朝日がしっかり入ります
-- 高層階なので静かです
-- 眺望が抜けています
+![眺望](${viewImage})
 
-![眺望](/view14.jpg)
+- 日当たり良好
+- 開放感があります
+- 高層階で静かです
 `;
 
-setChat((prev) => [
-  ...prev,
-  {
-    role: "bot",
-    text: botReply,
-  },
-]);
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
 
-await saveLog(userMsg, botReply);
+  await saveLog(userMsg, botReply);
 
-return;
+  return;
 }
 
 // =========================
@@ -330,69 +363,98 @@ return;
 if (mode === "room") {
 
   const roomPatterns = [
-  {
-    keyword: "子育て",
+    {
+      keyword: "子育て",
 
-    room1: "AType 3LDK",
-    image1: "/rooms/typea.jpg",
+      type1: "AType",
+      room1: "AType 3LDK",
+      image1: "/rooms/typea.jpg",
+      elevation1: "/elevation/typea.jpg",
+      view1: "/views/typea.jpg",
 
-    room2: "KType 4LDK",
-    image2: "/rooms/typek.jpg",
+      type2: "KType",
+      room2: "KType 4LDK",
+      image2: "/rooms/typek.jpg",
+      elevation2: "/elevation/typek.jpg",
+      view2: "/views/typek.jpg",
 
-    point: "ウォークインクローゼット付き",
-  },
+      point: "ウォークインクローゼット付き",
+    },
 
-  {
-    keyword: "在宅",
+    {
+      keyword: "在宅",
 
-    room1: "EType 1LDK",
-    image1: "/rooms/typee.jpg",
+      type1: "EType",
+      room1: "EType 1LDK",
+      image1: "/rooms/typee.jpg",
+      elevation1: "/elevation/typee.jpg",
+      view1: "/views/typee.jpg",
 
-    room2: "HType 1LDK",
-    image2: "/rooms/typeh.jpg",
+      type2: "HType",
+      room2: "HType 1LDK",
+      image2: "/rooms/typeh.jpg",
+      elevation2: "/elevation/typeh.jpg",
+      view2: "/views/typeh.jpg",
 
-    point: "収納スペースが充実",
-  },
+      point: "収納スペースが充実",
+    },
 
-  {
-    keyword: "単身",
+    {
+      keyword: "単身",
 
-    room1: "EType 1LDK",
-    image1: "/rooms/typee.jpg",
+      type1: "EType",
+      room1: "EType 1LDK",
+      image1: "/rooms/typee.jpg",
+      elevation1: "/elevation/typee.jpg",
+      view1: "/views/typee.jpg",
 
-    room2: "HType 1LDK",
-    image2: "/rooms/typeh.jpg",
+      type2: "HType",
+      room2: "HType 1LDK",
+      image2: "/rooms/typeh.jpg",
+      elevation2: "/elevation/typeh.jpg",
+      view2: "/views/typeh.jpg",
 
-    point: "単身向け設計",
-  },
+      point: "単身向け設計",
+    },
 
-  {
-    keyword: "広いリビング",
+    {
+      keyword: "広いリビング",
 
-    room1: "CType 3LDK",
-    image1: "/rooms/typec.jpg",
+      type1: "CType",
+      room1: "CType 3LDK",
+      image1: "/rooms/typec.jpg",
+      elevation1: "/elevation/typec.jpg",
+      view1: "/views/typec.jpg",
 
-    room2: "DType 2LDK",
-    image2: "/rooms/typed2.jpg",
+      type2: "DType",
+      room2: "DType 2LDK",
+      image2: "/rooms/typed2.jpg",
+      elevation2: "/elevation/typed2.jpg",
+      view2: "/views/typed2.jpg",
 
-    point: "開放感あるリビング",
-  },
-];
+      point: "開放感あるリビング",
+    },
+  ];
 
-const matched =
-  roomPatterns.find((r) =>
-    userMsg.includes(r.keyword)
-  ) || roomPatterns[0];
+  const matched =
+    roomPatterns.find((r) =>
+      userMsg.includes(r.keyword)
+    ) || roomPatterns[0];
 
-const room1 = matched.room1;
-const image1 = matched.image1;
+  const room1 = matched.room1;
+  const image1 = matched.image1;
+  const elevation1 = matched.elevation1;
+  const view1 = matched.view1;
 
-const room2 = matched.room2;
-const image2 = matched.image2;
+  const room2 = matched.room2;
+  const image2 = matched.image2;
+  const elevation2 = matched.elevation2;
+  const view2 = matched.view2;
 
-const point = matched.point;
+  const point = matched.point;
 
-  setRoomType(room1);
+  // 選択された眺望を保存
+  setRoomType(view1);
 
   setMode("view");
 
@@ -403,7 +465,7 @@ const point = matched.point;
 
 ![間取り1](${image1})
 
-![立面図1](/elevation/${floor || "14"}f.jpg)
+![立面図1](${elevation1})
 
 ---
 
@@ -411,28 +473,33 @@ const point = matched.point;
 
 ![間取り2](${image2})
 
-![立面図2](/elevation/${floor || "14"}f.jpg)
+![立面図2](${elevation2})
 
 ---
 
 ### 特徴
 ${point}
 
-「眺望」と入力すると
-おすすめ眺望も見れます 😊
+### 選択例
+- 「ATypeがいい」
+- 「KTypeがいい」
+- 「眺望」
+
+と入力すると、
+その部屋の眺望を表示できます 😊
 `;
 
-setChat((prev) => [
-  ...prev,
-  {
-    role: "bot",
-    text: botReply,
-  },
-]);
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
 
-await saveLog(userMsg, botReply);
+  await saveLog(userMsg, botReply);
 
-return;
+  return;
 }
 
 
