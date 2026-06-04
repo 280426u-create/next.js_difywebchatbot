@@ -220,19 +220,21 @@ if (mode === "environment") {
 
 if (
   mode === "environment" &&
-  environmentStep === "purpose" &&
-  userMsg.includes("通勤")
+  environmentStep === "purpose"
 ) {
 
   setEnvironmentStep("destination");
 
   const botReply = `
-通勤先はどちらですか？ 😊
+${userMsg}を重視されるのですね 😊
+
+具体的にどのエリアについて知りたいですか？
 
 ### 例
 - 高知駅方面
 - はりまや橋方面
 - 市役所方面
+- イオン周辺
 `;
 
   setChat((prev) => [
@@ -309,10 +311,6 @@ setEnvironmentStep("");
 
 ![バス停](/environment/bustei.jpg)
 
----
-
-## JR「入明」駅
-徒歩20分（約1,550m）
 
 `;
 
@@ -341,7 +339,7 @@ if (
   const botReply = `
 承知しました 😊
 
-他に気になる周辺環境があれば
+他に気になることがあれば
 お気軽にご質問ください。
 `;
 
