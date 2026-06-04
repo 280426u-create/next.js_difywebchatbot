@@ -48,6 +48,9 @@ const [floor, setFloor] = useState("");
 
 const [roomType, setRoomType] = useState("");
 
+const [environmentStep, setEnvironmentStep] =
+  useState("");
+
   // =========================
   // ローン用 state
   // =========================
@@ -157,6 +160,7 @@ if (
 ) {
 
   setMode("environment");
+setEnvironmentStep("category");
 
   const botReply = `
 # 📍 周辺環境案内
@@ -193,6 +197,8 @@ if (
   userMsg.includes("駅")
 ) {
 
+  setEnvironmentStep("station");
+  
   const botReply = `
 # 🚉 最寄り交通機関
 
