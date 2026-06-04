@@ -190,10 +190,15 @@ setEnvironmentStep("category");
 // =========================
 // 最寄り駅
 // =========================
-
+console.log("mode=", mode);
+console.log("userMsg=", userMsg);
 if (
   mode === "environment" &&
-  userMsg.includes("駅")
+  (
+    userMsg.includes("駅") ||
+    userMsg.includes("交通") ||
+    userMsg.includes("交通機関")
+  )
 ) {
 
   setEnvironmentStep("station");
