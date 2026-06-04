@@ -19,10 +19,9 @@ export default function QueryPage() {
 
 以下の相談ができます 😊
 
-- 「お部屋相談」
 - 「住宅ローン」
 - 「間取り相談」
-- 「周辺環境」（未完成）
+- 「周辺環境」
 `,
     },
   ]);
@@ -168,11 +167,11 @@ setEnvironmentStep("category");
 知りたい項目を選んでください 😊
 
 ### 項目
+- 交通機関
 - 医療施設
 - 教育施設
 - 商業施設
 - 公園
-- 最寄り駅
 `;
 
   setChat((prev) => [
@@ -198,7 +197,7 @@ if (
 ) {
 
   setEnvironmentStep("station");
-  
+
   const botReply = `
 # 🚉 最寄り交通機関
 
