@@ -1213,7 +1213,7 @@ setChat((prev) => {
   }}
 >
   <a
-    href="https://www.wagroup.co.jp/reserve/"
+    href="https://www.kano-kensetsu.com/bewell/kochi/modelroom-reservation/"
     target="_blank"
     rel="noopener noreferrer"
     style={{
