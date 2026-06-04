@@ -97,14 +97,24 @@ const [environmentStep, setEnvironmentStep] =
   });
 }
   async function send() {
-    if (!msg) return;
+  if (!msg) return;
 
-    const userMsg = msg;
-    // 先にユーザー吹き出し追加
-setChat((prev) => [
-  ...prev,
-  { role: "user", text: userMsg },
-]);
+  const userMsg = msg;
+
+  // 全角数字 → 半角数字へ変換
+  const normalizedMsg = userMsg.replace(
+    /[０-９]/g,
+    (s) =>
+      String.fromCharCode(
+        s.charCodeAt(0) - 0xFEE0
+      )
+  );
+
+  // 先にユーザー吹き出し追加
+  setChat((prev) => [
+    ...prev,
+    { role: "user", text: userMsg },
+  ]);
 
 setMsg("");
 
@@ -857,7 +867,7 @@ setChat((prev) =>[
 
     if (mode === "loan" && loanStep === "price") {
       const price =
-        Number(userMsg.replace(/[^0-9]/g, "")) *
+        Number(normalizedMsg.replace(/[^0-9]/g, "")) *
         10000;
 
       setLoanData((prev) => ({
@@ -888,7 +898,7 @@ setChat((prev) =>[
 
     if (mode === "loan" && loanStep === "down") {
       const down =
-        Number(userMsg.replace(/[^0-9]/g, "")) *
+        Number(normalizedMsg.replace(/[^0-9]/g, "")) *
         10000;
 
       setLoanData((prev) => ({
@@ -951,9 +961,7 @@ setChat((prev) =>[
     // =========================
 
     if (mode === "loan" && loanStep === "years") {
-      const years = Number(
-        userMsg.replace(/[^0-9]/g, "")
-      );
+      const years = Number(normalizedMsg.replace(/[^0-9]/g, ""));
 
       setLoanData((prev) => ({
         ...prev,
@@ -985,7 +993,7 @@ setChat((prev) =>[
     // =========================
 
     if (mode === "loan" && loanStep === "rate") {
-      const rate = Number(userMsg);
+      const rate = Number(normalizedMsg.replace(/[^0-9]/g, ""));
 
       const finalData = {
         ...loanData,
@@ -1112,10 +1120,29 @@ setChat((prev) => {
     <div style={styles.container(visible)}>
       {/* ヘッダー */}
       <div style={styles.header}>
-        <h2 style={{ margin: 0 }}>
-          🏠 住宅AIコンシェルジュ
-        </h2>
-      </div>
+  <div>
+    <h2
+      style={{
+        margin: 0,
+        fontSize: "32px",
+        fontWeight: 700,
+      }}
+    >
+      和建設 AIコンシェルジュ
+    </h2>
+
+    <p
+      style={{
+        margin: "6px 0 0",
+        opacity: 0.8,
+        fontSize: "14px",
+      }}
+    >
+      間取り・住宅ローン・周辺環境を
+      AIがご案内します
+    </p>
+  </div>
+</div>
 
       {/* チャット */}
       <div style={styles.chatArea}>
@@ -1136,8 +1163,8 @@ setChat((prev) => {
 
     maxWidth:
       c.role === "user"
-        ? "75%"
-        : "1000px",
+        ? "70%"
+        : "720px",
 
     background:
       c.role === "user"
@@ -1177,7 +1204,32 @@ setChat((prev) => {
           </div>
         ))}
       </div>
-
+{/* 来店予約ボタン */}
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    padding: "12px",
+  }}
+>
+  <a
+    href="https://www.wagroup.co.jp/reserve/"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      background: "linear-gradient(90deg,#f59e0b,#f97316)",
+      color: "#fff",
+      padding: "14px 28px",
+      borderRadius: "12px",
+      textDecoration: "none",
+      fontWeight: "bold",
+      boxShadow: "0 8px 20px rgba(249,115,22,0.3)",
+      transition: "0.2s",
+    }}
+  >
+    来店予約はこちら
+  </a>
+</div>
       {/* 入力欄 */}
       <div style={styles.inputArea}>
         <input
@@ -1220,13 +1272,17 @@ linear-gradient(
   }),
 
   header: {
-    padding: "16px 24px",
-    background: "#111827",
-    color: "#fff",
-    fontWeight: "bold",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-  },
+  padding: "28px 40px",
 
+  background:
+    "linear-gradient(90deg,#0f172a,#1e293b)",
+
+  color: "#fff",
+
+  boxShadow:
+    "0 4px 20px rgba(0,0,0,0.15)",
+    
+  },
   chatArea: {
   flex: 1,
 
@@ -1253,9 +1309,11 @@ linear-gradient(
 
   borderRadius: "18px",
 
-  maxWidth: "55%",
+  maxWidth: "720px",
 
- width: "70%" ,
+  width: "auto",
+
+  minWidth: "120px",
 
   fontSize: "15px",
 
