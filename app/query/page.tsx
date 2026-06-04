@@ -36,8 +36,11 @@ export default function QueryPage() {
   "floor" |
   "view" |
   "area" |
+  "environment" |
   "loan"
 >("normal");
+
+
 
 const [persona, setPersona] = useState("");
 
@@ -144,6 +147,106 @@ setMsg("");
 
 return;
 }
+
+// =========================
+// 周辺環境開始
+// =========================
+
+if (
+  userMsg.includes("周辺環境")
+) {
+
+  setMode("environment");
+
+  const botReply = `
+# 📍 周辺環境案内
+
+知りたい項目を選んでください 😊
+
+### 項目
+- 医療施設
+- 教育施設
+- 商業施設
+- 公園
+- 最寄り駅
+`;
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  await saveLog(userMsg, botReply);
+
+  return;
+}
+
+// =========================
+// 最寄り駅
+// =========================
+
+if (
+  mode === "environment" &&
+  userMsg.includes("駅")
+) {
+
+  const botReply = `
+# 🚉 最寄り交通機関
+
+## とさでん交通「高知城前」電停
+徒歩6分（約430m）
+
+![電停](/environment/romendensya.jpg)
+
+---
+
+## とさでん交通「高知城前」バス停
+徒歩4分（約470m）
+
+![バス停](/environment/bustei.jpg)
+
+---
+
+## JR「入明」駅
+徒歩20分（約1,550m）
+`;
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  await saveLog(userMsg, botReply);
+
+  return;
+}
+
+if (mode === "environment") {
+
+  const botReply = `
+申し訳ございません。
+
+その内容についてはAIではご案内できません。
+
+詳しくは担当スタッフへお問い合わせください 😊
+`;
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  return;
+}
+
     // =========================
 // ペルソナ診断開始
 // =========================
@@ -864,16 +967,35 @@ ${userMsg}
 
     const data = await res.json();
 
-    setChat((prev) => {
-      const newChat = [...prev];
+let reply = data.reply;
 
-      newChat[newChat.length - 1] = {
-        role: "bot",
-        text: data.reply,
-      };
+// 回答なし・不明の場合
+if (
+  !reply ||
+  reply.trim() === "" ||
+  reply.includes("わかりません") ||
+  reply.includes("不明") ||
+  reply.includes("回答できません")
+) {
+  reply = `
+申し訳ございません。
 
-      return newChat;
-    });
+その内容についてはAIでは正確にご案内できません。
+
+詳しくは担当スタッフへお問い合わせください 😊
+`;
+}
+
+setChat((prev) => {
+  const newChat = [...prev];
+
+  newChat[newChat.length - 1] = {
+    role: "bot",
+    text: reply,
+  };
+
+  return newChat;
+});
   }
 
   return (
