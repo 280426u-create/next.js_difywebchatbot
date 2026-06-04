@@ -48,7 +48,13 @@ const [floor, setFloor] = useState("");
 const [roomType, setRoomType] = useState("");
 
 const [environmentStep, setEnvironmentStep] =
-  useState("");
+  useState<
+    "" |
+    "purpose" |
+    "destination" |
+    "guide" |
+    "detail"
+  >("");
 
   // =========================
   // ローン用 state
@@ -159,19 +165,17 @@ if (
 ) {
 
   setMode("environment");
-setEnvironmentStep("category");
+  setEnvironmentStep("purpose");
 
   const botReply = `
 # 📍 周辺環境案内
 
-知りたい項目を選んでください 😊
+どのようなことを重視しますか？ 😊
 
-### 項目
-- 交通機関
-- 医療施設
-- 教育施設
-- 商業施設
-- 公園
+### 選択肢
+- 通勤
+- 通学
+- 買い物
 `;
 
   setChat((prev) => [
@@ -187,55 +191,7 @@ setEnvironmentStep("category");
   return;
 }
 
-// =========================
-// 最寄り駅
-// =========================
-console.log("mode=", mode);
-console.log("userMsg=", userMsg);
-if (
-  mode === "environment" &&
-  (
-    userMsg.includes("駅") ||
-    userMsg.includes("交通") ||
-    userMsg.includes("交通機関")
-  )
-) {
-
-  setEnvironmentStep("station");
-
-  const botReply = `
-# 🚉 最寄り交通機関
-
-## とさでん交通「高知城前」電停
-徒歩6分（約430m）
-
-![電停](/environment/romendensya.jpg)
-
----
-
-## とさでん交通「高知城前」バス停
-徒歩4分（約470m）
-
-![バス停](/environment/bustei.jpg)
-
----
-
-## JR「入明」駅
-徒歩20分（約1,550m）
-`;
-  setChat((prev) => [
-    ...prev,
-    {
-      role: "bot",
-      text: botReply,
-    },
-  ]);
-
-  await saveLog(userMsg, botReply);
-
-  return;
-}
-
+/*
 if (mode === "environment") {
 
   const botReply = `
@@ -256,8 +212,154 @@ if (mode === "environment") {
 
   return;
 }
+*/
 
-    // =========================
+// =========================
+// 通勤
+// =========================
+
+if (
+  mode === "environment" &&
+  environmentStep === "purpose" &&
+  userMsg.includes("通勤")
+) {
+
+  setEnvironmentStep("destination");
+
+  const botReply = `
+通勤先はどちらですか？ 😊
+
+### 例
+- 高知駅方面
+- はりまや橋方面
+- 市役所方面
+`;
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  await saveLog(userMsg, botReply);
+
+  return;
+}
+
+// =========================
+// 通勤先
+// =========================
+
+if (
+  mode === "environment" &&
+  environmentStep === "destination"
+) {
+
+  setEnvironmentStep("guide");
+
+  const botReply = `
+${userMsg}ですね 😊
+
+交通アクセスをご案内しますか？
+
+- はい
+- いいえ
+`;
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  await saveLog(userMsg, botReply);
+
+  return;
+}
+
+// =========================
+// 案内する
+// =========================
+
+if (
+  mode === "environment" &&
+  environmentStep === "guide" &&
+  userMsg.includes("はい")
+) {
+
+  setMode("normal");
+setEnvironmentStep("");
+
+  const botReply = `
+# 🚉 最寄り交通機関
+
+## とさでん交通「高知城前」電停
+徒歩6分（約430m）
+
+![電停](/environment/romendensya.jpg)
+
+---
+
+## とさでん交通「高知城前」バス停
+徒歩4分（約470m）
+
+![バス停](/environment/bustei.jpg)
+
+---
+
+## JR「入明」駅
+徒歩20分（約1,550m）
+
+`;
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  await saveLog(userMsg, botReply);
+
+  return;
+}
+// =========================
+// 案内しない
+// =========================
+
+if (
+  mode === "environment" &&
+  environmentStep === "guide" &&
+  userMsg.includes("いいえ")
+) {
+
+  const botReply = `
+承知しました 😊
+
+他に気になる周辺環境があれば
+お気軽にご質問ください。
+`;
+
+  setChat((prev) => [
+    ...prev,
+    {
+      role: "bot",
+      text: botReply,
+    },
+  ]);
+
+  await saveLog(userMsg, botReply);
+
+  return;
+}
+
+
+// =========================
 // ペルソナ診断開始
 // =========================
 
